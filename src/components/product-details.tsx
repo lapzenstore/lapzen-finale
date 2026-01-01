@@ -64,19 +64,21 @@ export function ProductDetails({ product }: { product: Product }) {
     { label: "Category", value: product.category },
     { label: "RAM", value: product.ram_size || product.specs?.ram },
     { label: "Storage", value: product.storage_size || product.specs?.storage },
-    ...(product.specs ? Object.entries(product.specs).map(([k, v]) => ({ label: k.toUpperCase(), value: String(v) })) : [])
+    ...(product.specs ? Object.entries(product.specs)
+      .filter(([k]) => k.toLowerCase() !== 'ram' && k.toLowerCase() !== 'storage')
+      .map(([k, v]) => ({ label: k.toUpperCase(), value: String(v) })) : [])
   ].filter(s => s.value);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
       {/* Image Gallery */}
       <div className="space-y-4">
-        <div className="relative aspect-square rounded-3xl overflow-hidden bg-muted border border-border">
+        <div className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8">
           <Image
             src={images[selectedImage]}
             alt={product.title}
             fill
-            className="object-cover"
+            className="object-contain"
             priority
             unoptimized={images[selectedImage].startsWith('http')}
           />
@@ -91,13 +93,13 @@ export function ProductDetails({ product }: { product: Product }) {
                   selectedImage === idx ? "border-navy shadow-md" : "border-transparent opacity-70 hover:opacity-100"
                 }`}
               >
-                <Image
-                  src={img}
-                  alt={`${product.title} ${idx + 1}`}
-                  fill
-                  className="object-cover"
-                  unoptimized={img.startsWith('http')}
-                />
+                  <Image
+                    src={img}
+                    alt={`${product.title} ${idx + 1}`}
+                    fill
+                    className="object-contain p-2"
+                    unoptimized={img.startsWith('http')}
+                  />
               </button>
             ))}
           </div>
@@ -130,9 +132,9 @@ export function ProductDetails({ product }: { product: Product }) {
               In Stock
             </span>
           </div>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            {product.description}
-          </p>
+            <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              {product.description}
+            </p>
         </div>
 
         {/* Specs Grid */}
