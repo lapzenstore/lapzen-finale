@@ -173,9 +173,6 @@ export function ProductDetails({ product }: { product: Product }) {
                 <Plus className="w-4 h-4" />
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground font-medium">
-              Only a few items left!
-            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -205,7 +202,7 @@ export function ProductDetails({ product }: { product: Product }) {
             <div className="w-12 h-12 rounded-2xl bg-navy/5 flex items-center justify-center mb-3">
               <Shield className="w-6 h-6 text-navy" />
             </div>
-            <span className="text-xs font-bold text-navy uppercase tracking-tighter">Official Warranty</span>
+            <span className="text-xs font-bold text-navy uppercase tracking-tighter">30 days Warranty</span>
           </div>
           <div className="flex flex-col items-center text-center">
             <div className="w-12 h-12 rounded-2xl bg-navy/5 flex items-center justify-center mb-3">
@@ -217,10 +214,11 @@ export function ProductDetails({ product }: { product: Product }) {
             <div className="w-12 h-12 rounded-2xl bg-navy/5 flex items-center justify-center mb-3">
               <RotateCcw className="w-6 h-6 text-navy" />
             </div>
-            <span className="text-xs font-bold text-navy uppercase tracking-tighter">7 Days Return</span>
+            <span className="text-xs font-bold text-navy uppercase tracking-tighter">30 Days Return</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
