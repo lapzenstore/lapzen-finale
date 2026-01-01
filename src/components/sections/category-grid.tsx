@@ -36,9 +36,9 @@ const CategoryGrid = () => {
         href: "/catalog?category=2-in-1",
       },
       {
-        title: "All Laptops",
+        title: "Ultra Light",
         image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=2070&auto=format&fit=crop",
-        href: "/catalog",
+        href: "/catalog?category=Ultra%20Light",
       },
     ];
 
