@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/schema";
 import { notFound } from "next/navigation";
 import { ProductsSection } from "@/components/sections/featured-products";
 import { slugify } from "@/lib/slugify";
+import type { Metadata } from "next";
 
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -84,10 +85,10 @@ export default async function ProductPage(props: {
       <JsonLd data={productSchema} />
       <Header />
       
-      <main className="flex-grow bg-white">
-        <div className="container px-4 pt-32 pb-12 md:pt-44 md:pb-20 mx-auto">
-          <ProductDetails product={product} />
-        </div>
+        <main className="flex-grow bg-white">
+          <div className="container px-4 pt-44 pb-12 md:pt-60 md:pb-20 mx-auto">
+            <ProductDetails product={product} />
+          </div>
 
         {/* Related Products Section */}
         <div className="border-t border-border">
