@@ -49,16 +49,15 @@ function LocalCheckoutForm({
   const paymentInstructions = {
     jazzcash: {
       title: "JazzCash",
-      accountName: "LAPZEN TECH PVT LTD",
-      accountNumber: "0321-1234567",
+      accountName: "Muhammad Asim",
+      accountNumber: "0309-0009022",
       instructions: "Transfer the total amount to the JazzCash account below and enter the Transaction ID."
     },
     bank_transfer: {
       title: "Bank Transfer",
-      accountName: "LAPZEN TECH PVT LTD",
-      bankName: "Meezan Bank",
-      accountNumber: "1234-5678-9012-3456",
-      branchCode: "0123",
+      accountName: "M. Asim",
+      bankName: "United Bank Limited (UBL)",
+      accountNumber: "0360274723326",
       instructions: "Transfer the total amount to our Meezan Bank account and enter the reference number."
     }
   };
@@ -507,3 +506,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
