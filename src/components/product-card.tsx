@@ -82,15 +82,15 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group bg-white border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-navy/20">
       <JsonLd data={productSchema} />
-      <Link href={`/products/${slug}`}>
-        <div className="relative aspect-[4/3] bg-card overflow-hidden">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            unoptimized={image.startsWith('http')}
-          />
+        <Link href={`/products/${slug}`}>
+          <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className="object-contain transition-transform duration-500 group-hover:scale-105 p-4"
+              unoptimized={image.startsWith('http')}
+            />
           <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <Button
             onClick={handleAddToCart}
