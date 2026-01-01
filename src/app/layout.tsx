@@ -18,7 +18,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Lapzen - Premium Laptops",
-  description: "Your destination for premium laptops",
+  description: "Your destination for premium laptops. Shop top brands like Apple, Dell, HP, and Asus at competitive prices.",
+  openGraph: {
+    title: "Lapzen - Premium Laptops",
+    description: "Your destination for premium laptops. Shop top brands like Apple, Dell, HP, and Asus at competitive prices.",
+    images: [{ url: "https://ojvgpgjokyjriesqkncz.supabase.co/storage/v1/object/public/test-clones/3703ae26-4d55-4c16-ad94-b7374ad76a02-lapzen-store/assets/svgs/347e75bb-ec5b-455b-be95-96a1d46d0742_096381d0-0717-1.svg", width: 1200, height: 630, alt: "Lapzen - Premium Laptops" }],
+    type: "website",
+    siteName: "Lapzen",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lapzen - Premium Laptops",
+    description: "Your destination for premium laptops. Shop top brands like Apple, Dell, HP, and Asus at competitive prices.",
+    images: ["https://ojvgpgjokyjriesqkncz.supabase.co/storage/v1/object/public/test-clones/3703ae26-4d55-4c16-ad94-b7374ad76a02-lapzen-store/assets/svgs/347e75bb-ec5b-455b-be95-96a1d46d0742_096381d0-0717-1.svg"],
+  },
 };
 
 const organizationSchema = {
