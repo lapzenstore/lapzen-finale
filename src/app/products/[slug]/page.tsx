@@ -85,7 +85,7 @@ export default async function ProductPage(props: {
       <Header />
       
       <main className="flex-grow bg-white">
-        <div className="container px-4 py-12 md:py-20 mx-auto">
+        <div className="container px-4 pt-32 pb-12 md:pt-44 md:pb-20 mx-auto">
           <ProductDetails product={product} />
         </div>
 
