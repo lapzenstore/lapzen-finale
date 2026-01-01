@@ -14,7 +14,7 @@ function LaptopForm({
   handleImageUpload, 
   removeImage
 }: any) {
-  const categories = ["Gaming", "ChromeBooks", "Workstations", "Business", "2 in 1"];
+  const categories = ["Gaming", "ChromeBooks", "Workstations", "Business", "2 in 1", "Ultra Light"];
   const brands = ["Dell", "Lenovo", "HP", "Toshiba", "Asus", "Apple"];
   const series = [
     "HP Omen", "HP Zbook", "HP Elitebook", 
