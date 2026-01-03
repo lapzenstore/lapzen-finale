@@ -188,7 +188,7 @@ export function ProductDetails({ product }: { product: Product }) {
             <Button
               onClick={handleBuyNow}
               size="lg"
-              className="h-14 rounded-2xl font-bold text-lg gap-3 bg-navy hover:bg-accent transition-all group"
+              className="h-14 rounded-2xl font-bold text-lg bg-#00172E gap-3 bg-navy hover:bg-accent transition-all group"
             >
               <Zap className="w-5 h-5 fill-current group-hover:scale-110 transition-transform" />
               Buy It Now
@@ -221,4 +221,5 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
   );
 }
+
 
