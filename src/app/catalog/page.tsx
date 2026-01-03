@@ -112,7 +112,7 @@ function CatalogContent() {
       }} />
       <Header />
 
-      <main className="flex-grow pb-20 padding-top: 20px">
+      <main className="flex-grow pb-20 pt-28">
         {heroImage && (
           <div className="relative h-[300px] md:h-[400px] overflow-hidden mb-12">
             <div 
@@ -279,4 +279,5 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
+
 
