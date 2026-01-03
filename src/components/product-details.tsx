@@ -190,7 +190,7 @@ export function ProductDetails({ product }: { product: Product }) {
               size="lg"
               className="h-14 rounded-2xl font-bold text-lg bg-[#00172E] gap-3 bg-navy transition-all group"
             >
-              <Zap className="w-5 h-5 fill-current transition-transform" />
+              <Zap className="w-5 h-5 fill-current " />
               Buy It Now
             </Button>
           </div>
@@ -221,6 +221,7 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
   );
 }
+
 
 
 
