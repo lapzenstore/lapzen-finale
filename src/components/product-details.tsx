@@ -186,13 +186,36 @@ export function ProductDetails({ product }: { product: Product }) {
               Add to Cart
             </Button>
             <Button
-              onClick={handleBuyNow}
-              size="lg"
-              className="h-14 rounded-2xl font-bold text-lg bg-[#00172E] gap-3 bg-navy transition-all group"
-            >
-              <Zap className="w-5 h-5 fill-current " />
-              Buy It Now
-            </Button>
+  onClick={handleBuyNow}
+  size="lg"
+  className="
+    h-14
+    rounded-2xl
+    font-bold
+    text-lg
+    gap-3
+
+    /* DEFAULT = hovered look */
+    bg-[#00172E]
+    text-white
+    shadow-lg
+
+    /* HOVER = Add to Cart style */
+    hover:bg-white
+    hover:text-[#00172E]
+    hover:border-2
+    hover:border-[#00172E]
+    hover:shadow-none
+
+    transition-all
+    duration-300
+    ease-out
+  "
+>
+  <Zap className="w-5 h-5 fill-current" />
+  Buy It Now
+</Button>
+
           </div>
         </div>
 
@@ -221,6 +244,7 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
   );
 }
+
 
 
 
