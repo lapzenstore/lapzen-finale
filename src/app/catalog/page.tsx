@@ -112,7 +112,7 @@ function CatalogContent() {
       }} />
       <Header />
 
-      <main className="flex-grow pb-20 pt-28">
+      <main className="flex-grow pb-20 pt-24">
         {heroImage && (
           <div className="relative h-[300px] md:h-[400px] overflow-hidden mb-12">
             <div 
