@@ -158,7 +158,7 @@ export function ProductDetails({ product }: { product: Product }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full h-10 w-10 hover:bg-white transition-colors"
+                className="rounded-full h-10 w-10 hover:bg-white hover:text-[#00172E] transition-colors"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
               >
                 <Minus className="w-4 h-4" />
@@ -167,7 +167,7 @@ export function ProductDetails({ product }: { product: Product }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full h-10 w-10 hover:bg-white transition-colors"
+                className="rounded-full h-10 w-10 hover:bg-white hover:text-[#00172E] transition-colors"
                 onClick={() => setQuantity(quantity + 1)}
               >
                 <Plus className="w-4 h-4" />
@@ -221,6 +221,7 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
   );
 }
+
 
 
 
