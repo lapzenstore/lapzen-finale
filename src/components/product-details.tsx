@@ -180,7 +180,7 @@ export function ProductDetails({ product }: { product: Product }) {
               onClick={handleAddToCart}
               size="lg"
               variant="outline"
-              className="h-14 rounded-2xl border-2 font-bold text-lg gap-3 hover:bg-navy hover:text-[#00172E] transition-all group"
+              className="h-14 rounded-2xl border-2 font-bold text-lg gap-3 hover:bg-navy hover:text-white hover:bg-[#00172E] transition-all group"
             >
               <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
               Add to Cart
@@ -221,6 +221,7 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
   );
 }
+
 
 
 
