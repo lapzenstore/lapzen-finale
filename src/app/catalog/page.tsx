@@ -107,12 +107,12 @@ function CatalogContent() {
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Laptop Catalog - Lapzen",
-        "description": "Browse our full collection of premium laptops from Apple, Dell, Asus, and more.",
+        "description": "Browse our full collection of premium laptops from HP, Apple, Dell, Lenovo, and more.",
         "url": "https://lapzen.com/catalog"
       }} />
       <Header />
 
-      <main className="flex-grow pb-20">
+      <main className="flex-grow pb-20 padding-top: 20px">
         {heroImage && (
           <div className="relative h-[300px] md:h-[400px] overflow-hidden mb-12">
             <div 
@@ -279,3 +279,4 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
+
