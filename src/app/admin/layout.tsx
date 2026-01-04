@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 flex flex-col gap-8 h-fit sticky top-[180px]">
             <div className="flex items-center gap-3 px-2">
               <div className="bg-navy p-2 rounded-xl shadow-lg shadow-navy/20 flex items-center justify-center">
-                <Image src="/logo.png" alt="Lapzen" width={32} height={32} className="w-8 h-8 object-contain brightness-20 invert" />
+                <Image src="/logo.png" alt="Lapzen" width={32} height={32} className="w-8 h-8 object-contain brightness-50 invert" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold tracking-tight text-navy leading-none">Lapzen</span>
@@ -153,6 +153,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+
 
 
 
