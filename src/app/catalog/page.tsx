@@ -323,20 +323,6 @@ function CatalogContent() {
                           <span className="text-sm font-medium text-gray-600 group-hover:text-navy transition-colors">{storage}</span>
                         </label>
                       ))}
-                  <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
-                    <button 
-                      onClick={applyFilters}
-                      className="w-full py-3 bg-navy text-white rounded-xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
-                    >
-                      Apply Filters
-                    </button>
-                    <button 
-                      onClick={resetFilters}
-                      className="w-full py-3 bg-white text-gray-400 rounded-xl font-bold text-sm hover:text-navy hover:bg-gray-50 transition-all"
-                    >
-                      Reset All
-                    </button>
-                  </div>
                     </div>
                   </div>
                 </div>
@@ -378,6 +364,5 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
-
 
 
