@@ -13,23 +13,23 @@ import { ArrowLeft } from "lucide-react";
 
 const HERO_IMAGES: Record<string, string> = {
   // Brands
-  'hp': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/hp-1767119994306.jpeg?width=8000&height=8000&resize=contain',
-  'dell': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/dell-1767119994307.jpeg?width=8000&height=8000&resize=contain',
-  'apple': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/apple-1767119994307.jpeg?width=8000&height=8000&resize=contain',
-  'lenovo': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/lenovo-1767119994306.jpeg?width=8000&height=8000&resize=contain',
-  'acer': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/acer-1767119994307.jpeg?width=8000&height=8000&resize=contain',
-  'toshiba': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/toshiba-1767119994306.jpeg?width=8000&height=8000&resize=contain',
+  'hp': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/hp-1767119994306.jpeg?width=800&height=800&resize=contain',
+  'dell': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/dell-1767119994307.jpeg?width=800&height=800&resize=contain',
+  'apple': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/apple-1767119994307.jpeg?width=800&height=800&resize=contain',
+  'lenovo': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/lenovo-1767119994306.jpeg?width=800&height=800&resize=contain',
+  'acer': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/acer-1767119994307.jpeg?width=800&height=800&resize=contain',
+  'toshiba': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/toshiba-1767119994306.jpeg?width=800&height=800&resize=contain',
   // Categories
-  'gaming': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/gaming-resized-1767120834252.webp?width=8000&height=8000&resize=contain',
-  'chromebooks': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/chromebooks-1767120833869.webp?width=8000&height=8000&resize=contain',
-  'workstations': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/workstations-1767120833870.webp?width=8000&height=8000&resize=contain',
-  'business': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/business-1767120833871.webp?width=8000&height=8000&resize=contain',
-  '2-in-1': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-in-1-1767120833874.webp?width=8000&height=8000&resize=contain',
+  'gaming': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/gaming-resized-1767120834252.webp?width=800&height=800&resize=contain',
+  'chromebooks': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/chromebooks-1767120833869.webp?width=800&height=800&resize=contain',
+  'workstations': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/workstations-1767120833870.webp?width=800&height=800&resize=contain',
+  'business': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/business-1767120833871.webp?width=800&height=800&resize=contain',
+  '2-in-1': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-in-1-1767120833874.webp?width=800&height=800&resize=contain',
   // Series
-  'elitebook': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Hp-elitebook-1767121413659.webp?width=8000&height=8000&resize=contain',
-  'macbook': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/apple-macbook-1767121413584.webp?width=8000&height=8000&resize=contain',
-  'latitude': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/dell-latitude-1767121413633.webp?width=8000&height=8000&resize=contain',
-  'thinkpad': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/lenovo-thinkpad-1767121413587.webp?width=8000&height=8000&resize=contain',
+  'elitebook': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Hp-elitebook-1767121413659.webp?width=800&height=800&resize=contain',
+  'macbook': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/apple-macbook-1767121413584.webp?width=800&height=800&resize=contain',
+  'latitude': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/dell-latitude-1767121413633.webp?width=800&height=800&resize=contain',
+  'thinkpad': 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/lenovo-thinkpad-1767121413587.webp?width=800&height=800&resize=contain',
 };
 
 function CatalogContent() {
@@ -43,12 +43,14 @@ function CatalogContent() {
   const activeCategory = searchParams.get("category");
   const activeBrand = searchParams.get("brand");
   const activeSeries = searchParams.get("series");
-  const activeRam = searchParams.get("ram");
-  const activeStorage = searchParams.get("storage");
-  const activeFeatured = searchParams.get("featured");
-  const activeNewArrival = searchParams.get("new_arrival");
-
-  const getHeroImage = () => {
+    const activeRam = searchParams.get("ram");
+    const activeStorage = searchParams.get("storage");
+    const activeFeatured = searchParams.get("featured");
+    const activeNewArrival = searchParams.get("new_arrival");
+    const activeMinPrice = searchParams.get("min_price");
+    const activeMaxPrice = searchParams.get("max_price");
+  
+    const getHeroImage = () => {
     if (activeSeries) return HERO_IMAGES[activeSeries.toLowerCase()];
     if (activeCategory) return HERO_IMAGES[activeCategory.toLowerCase()];
     if (activeBrand) return HERO_IMAGES[activeBrand.toLowerCase()];
@@ -58,21 +60,23 @@ function CatalogContent() {
   const heroImage = getHeroImage();
   const heroTitle = activeSeries || activeCategory || activeBrand || "Catalog";
 
-  useEffect(() => {
-    fetchProducts();
-  }, [activeCategory, activeBrand, activeSeries, activeFeatured, activeNewArrival]);
-
-  async function fetchProducts() {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (activeCategory) params.set("category", activeCategory);
-      if (activeBrand) params.set("brand", activeBrand);
-      if (activeSeries) params.set("series", activeSeries);
-      if (activeFeatured) params.set("featured", activeFeatured);
-      if (activeNewArrival) params.set("new_arrival", activeNewArrival);
-      
-      const res = await fetch(`/api/products?${params.toString()}`);
+    useEffect(() => {
+      fetchProducts();
+    }, [activeCategory, activeBrand, activeSeries, activeFeatured, activeNewArrival, activeMinPrice, activeMaxPrice]);
+  
+    async function fetchProducts() {
+      setLoading(true);
+      try {
+        const params = new URLSearchParams();
+        if (activeCategory) params.set("category", activeCategory);
+        if (activeBrand) params.set("brand", activeBrand);
+        if (activeSeries) params.set("series", activeSeries);
+        if (activeFeatured) params.set("featured", activeFeatured);
+        if (activeNewArrival) params.set("new_arrival", activeNewArrival);
+        if (activeMinPrice) params.set("min_price", activeMinPrice);
+        if (activeMaxPrice) params.set("max_price", activeMaxPrice);
+        
+        const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
       if (res.ok) setProducts(data);
     } catch (error) {
@@ -161,13 +165,25 @@ function CatalogContent() {
                     <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('brand')} />
                   </span>
                 )}
-                {activeSeries && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-white text-xs font-bold">
-                    {activeSeries}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('series')} />
-                  </span>
-                )}
-              </div>
+                  {activeSeries && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-white text-xs font-bold">
+                      {activeSeries}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('series')} />
+                    </span>
+                  )}
+                  {activeMinPrice && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
+                      Min: {activeMinPrice}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('min_price')} />
+                    </span>
+                  )}
+                  {activeMaxPrice && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
+                      Max: {activeMaxPrice}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('max_price')} />
+                    </span>
+                  )}
+                </div>
             </div>
 
             <div className="flex items-center gap-3">
@@ -197,8 +213,77 @@ function CatalogContent() {
             {showFilters && (
               <aside className="lg:col-span-1 space-y-8 animate-in fade-in slide-in-from-left duration-300">
                 <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-8">
-                  <div>
-                    <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
+                    <div>
+                      <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">Price Range</h3>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">Min</label>
+                            <input 
+                              type="number" 
+                              placeholder="0"
+                              className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
+                              value={activeMinPrice || ""}
+                              onChange={(e) => {
+                                const params = new URLSearchParams(searchParams.toString());
+                                if (!e.target.value) params.delete('min_price');
+                                else params.set('min_price', e.target.value);
+                                router.push(`/catalog?${params.toString()}`);
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">Max</label>
+                            <input 
+                              type="number" 
+                              placeholder="500000"
+                              className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
+                              value={activeMaxPrice || ""}
+                              onChange={(e) => {
+                                const params = new URLSearchParams(searchParams.toString());
+                                if (!e.target.value) params.delete('max_price');
+                                else params.set('max_price', e.target.value);
+                                router.push(`/catalog?${params.toString()}`);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { label: '< 50k', min: '0', max: '50000' },
+                            { label: '50k - 100k', min: '50000', max: '100000' },
+                            { label: '100k - 200k', min: '100000', max: '200000' },
+                            { label: '200k+', min: '200000', max: '' },
+                          ].map((range) => (
+                            <button
+                              key={range.label}
+                              onClick={() => {
+                                const params = new URLSearchParams(searchParams.toString());
+                                if (activeMinPrice === range.min && activeMaxPrice === range.max) {
+                                  params.delete('min_price');
+                                  params.delete('max_price');
+                                } else {
+                                  if (range.min) params.set('min_price', range.min); else params.delete('min_price');
+                                  if (range.max) params.set('max_price', range.max); else params.delete('max_price');
+                                }
+                                router.push(`/catalog?${params.toString()}`);
+                              }}
+                              className={cn(
+                                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all border",
+                                activeMinPrice === range.min && activeMaxPrice === range.max
+                                  ? "bg-navy text-white border-navy"
+                                  : "bg-gray-50 text-gray-600 border-gray-100 hover:border-navy/20"
+                              )}
+                            >
+                              {range.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
                     <div className="space-y-2">
                       {['8GB', '16GB', '32GB', '64GB'].map((ram) => (
                         <label key={ram} className="flex items-center gap-3 cursor-pointer group">
