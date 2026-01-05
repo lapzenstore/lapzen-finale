@@ -16,7 +16,7 @@ const brands = [
   },
   {
     name: 'DELL',
-    image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&q=80',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/dell-1767119994307.jpeg?w=800&q=80',
     href: '/catalog?brand=Dell'
   },
   {
@@ -328,5 +328,6 @@ function SeriesCard({ title, image, href, subtext }: { title: string; image: str
     </Link>
   );
 }
+
 
 
