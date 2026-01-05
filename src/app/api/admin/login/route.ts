@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const ADMIN_PASSWORD = "K@$h!786";
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
     if (password?.trim() === ADMIN_PASSWORD) {
       const cookieStore = await cookies();
@@ -37,3 +37,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
