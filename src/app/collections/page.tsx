@@ -21,7 +21,7 @@ const brands = [
   },
   {
     name: 'APPLE',
-    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca4?w=800&q=80',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/apple-1767119994307.jpeg?w=800&q=80',
     href: '/catalog?brand=Apple'
   },
   {
@@ -328,3 +328,4 @@ function SeriesCard({ title, image, href, subtext }: { title: string; image: str
     </Link>
   );
 }
+
