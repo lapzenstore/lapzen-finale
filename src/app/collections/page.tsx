@@ -139,7 +139,7 @@ const seriesList = [
       },
     {
       title: "Toshiba",
-      image: "https://images.unsplash.com/photo-1544006659-f0b21f04cb1d?w=800&q=80",
+      image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/toshiba-2-1767201502533.jpeg?w=800&q=80",
       href: "/series/toshiba",
       subtext: "Leading innovation. Reliable technology for every user."
     },
@@ -328,4 +328,5 @@ function SeriesCard({ title, image, href, subtext }: { title: string; image: str
     </Link>
   );
 }
+
 
