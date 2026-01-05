@@ -285,7 +285,7 @@ function CatalogContent() {
                     <div>
                       <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
                     <div className="space-y-2">
-                      {['8GB', '16GB', '32GB', '64GB'].map((ram) => (
+                      {['4GB','8GB', '16GB', '32GB', '64GB'].map((ram) => (
                         <label key={ram} className="flex items-center gap-3 cursor-pointer group">
                           <input 
                             type="checkbox" 
@@ -307,7 +307,7 @@ function CatalogContent() {
                   <div>
                     <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">Storage</h3>
                     <div className="space-y-2">
-                      {['256GB', '512GB', '1TB', '2TB'].map((storage) => (
+                      {['128GB','256GB', '512GB', '1TB', '2TB'].map((storage) => (
                         <label key={storage} className="flex items-center gap-3 cursor-pointer group">
                           <input 
                             type="checkbox" 
@@ -364,5 +364,6 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
+
 
 
