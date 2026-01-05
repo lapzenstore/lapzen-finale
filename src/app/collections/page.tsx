@@ -26,7 +26,7 @@ const brands = [
   },
   {
     name: 'LENOVO',
-    image: 'https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&q=80',
+    image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/lenovo-1767119994306.jpeg?w=800&q=80',
     href: '/catalog?brand=Lenovo'
   },
   {
@@ -328,6 +328,7 @@ function SeriesCard({ title, image, href, subtext }: { title: string; image: str
     </Link>
   );
 }
+
 
 
 
