@@ -201,7 +201,7 @@ function CatalogContent() {
                 onClick={() => setShowFilters(!showFilters)}
                 className={cn(
                   "p-3 rounded-2xl border transition-all",
-                  showFilters ? "bg-navy text-white border-navy" : "bg-white text-navy border-gray-100 hover:bg-gray-50"
+                  showFilters ? "bg-navy text-[#00172E] border-navy" : "bg-white text-navy border-gray-100 hover:bg-gray-50"
                 )}
               >
                 <SlidersHorizontal className="w-6 h-6" />
@@ -364,5 +364,6 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
+
 
 
