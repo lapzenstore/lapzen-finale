@@ -20,6 +20,8 @@ export async function GET(request: Request) {
     const featured = searchParams.get('featured');
     const new_arrival = searchParams.get('new_arrival');
     const search = searchParams.get('search');
+    const min_price = searchParams.get('min_price');
+    const max_price = searchParams.get('max_price');
 
     let query = supabaseAdmin.from('products').select('*');
 
@@ -28,6 +30,9 @@ export async function GET(request: Request) {
     if (series) query = query.eq('series', series);
     if (featured) query = query.eq('featured', true);
     if (new_arrival) query = query.eq('new_arrival', true);
+    
+    if (min_price) query = query.gte('price', parseInt(min_price));
+    if (max_price) query = query.lte('price', parseInt(max_price));
     
     if (search) {
       console.log('Searching for:', search);
