@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const url = "https://ovxxmjqwacgtupatlbhm.supabase.co";
-const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92eHhtanF3YWNndHVwYXRsYmhtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjE2MDI3MywiZXhwIjoyMDgxNzM2MjczfQ.JldBUxsPqMHGF8HvyOzBVWdLHcY1pTx3AcZfNgeVHVc";
+const Url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 
 const supabase = createClient(url, key);
 
@@ -20,3 +21,4 @@ async function test() {
 }
 
 test();
+
