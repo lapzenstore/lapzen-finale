@@ -104,31 +104,39 @@ export default function BrandPage() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header />
       
-      <main className="flex-grow pt-32">
-        <div className="relative h-[300px] md:h-[400px] overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${brand.image})` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 to-navy/70" />
-          <div className="absolute inset-0 flex items-center">
-            <div className="container mx-auto px-5 lg:px-8 max-w-[1200px]">
-              <Link 
-                href="/" 
-                className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4 transition-colors"
-              >
-                <ArrowLeft size={18} />
-                Back to Home
-              </Link>
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                {brand.name} Laptops
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-                {brand.description}
-              </p>
+        <main className="flex-grow pt-32">
+          <div className="relative h-[400px] md:h-[500px] overflow-hidden bg-slate-50">
+            <div className="absolute inset-0 flex items-center justify-end pr-0 md:pr-20 opacity-20 md:opacity-100">
+              <div className="relative w-full h-full md:w-[600px] md:h-[400px]">
+                <img 
+                  src={brand.image} 
+                  alt={brand.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" />
+            <div className="absolute inset-0 flex items-center">
+              <div className="container mx-auto px-5 lg:px-8 max-w-[1200px] relative z-10">
+                <Link 
+                  href="/" 
+                  className="inline-flex items-center gap-2 text-navy/60 hover:text-navy mb-6 transition-colors font-medium"
+                >
+                  <ArrowLeft size={18} />
+                  Back to Home
+                </Link>
+                <div className="inline-block px-4 py-1.5 bg-navy/5 rounded-full text-navy font-bold text-sm mb-6 tracking-wider uppercase">
+                  Premium Collection
+                </div>
+                <h1 className="text-5xl md:text-7xl font-black text-navy mb-6 tracking-tight">
+                  {brand.name} <span className="text-navy/20">Laptops</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-slate-600 max-w-xl leading-relaxed font-medium">
+                  {brand.description}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-5 lg:px-8 max-w-[1200px]">
