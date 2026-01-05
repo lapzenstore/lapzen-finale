@@ -14,6 +14,7 @@ interface ProductsSectionProps {
   viewAllLink?: string;
   initialProducts?: any[];
   showViewAll?: boolean;
+  limit?: number;
 }
 
 export function ProductsSection({ 
@@ -24,7 +25,8 @@ export function ProductsSection({
   series,
   viewAllLink = "/catalog",
   initialProducts,
-  showViewAll = true
+  showViewAll = true,
+  limit
 }: ProductsSectionProps) {
   const [products, setProducts] = useState<any[]>(initialProducts || []);
   const [loading, setLoading] = useState(!initialProducts);
@@ -43,8 +45,10 @@ export function ProductsSection({
         const res = await fetch(`/api/products?${queryParam}`);
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
-        // If it's a series page, show all products, otherwise limit to 8
-        setProducts(series ? data : data.slice(0, 8));
+        
+        // Use custom limit if provided, otherwise default to 8 (or all for series)
+        const finalLimit = limit || (series ? undefined : 8);
+        setProducts(finalLimit ? data.slice(0, finalLimit) : data);
       } catch (error) {
         console.error(`Error fetching ${type} products:`, error);
       } finally {
@@ -53,32 +57,32 @@ export function ProductsSection({
     }
 
     fetchProducts();
-  }, [type, brand, series]);
+  }, [type, brand, series, limit]);
 
   const titleWords = title.split(' ');
 
   return (
     <section className="bg-white py-4 md:py-6">
       <div className="container px-4 mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-black text-primary mb-4 tracking-tight">
-              {titleWords.map((word, i) => (
-                <span key={i} className={i === 1 ? "opacity-40" : ""}>{word} </span>
-              ))}
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">{description}</p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl md:text-4xl font-black text-primary mb-4 tracking-tight">
+                {titleWords.map((word, i) => (
+                  <span key={i} className={i === 1 ? "opacity-40" : ""}>{word} </span>
+                ))}
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">{description}</p>
+            </div>
+            {showViewAll && (
+              <Link 
+                href={viewAllLink}
+                className="hidden md:flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-accent hover:shadow-2xl hover:-translate-y-1 transition-all group"
+              >
+                <span>View All {brand || (type === 'featured' ? 'Featured' : 'New Arrivals')}</span>
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            )}
           </div>
-          {showViewAll && (
-            <Link 
-              href={viewAllLink}
-              className="hidden md:flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-accent hover:shadow-2xl hover:-translate-y-1 transition-all group"
-            >
-              <span>View All {type === 'featured' ? 'Featured' : 'New Arrivals'}</span>
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          )}
-        </div>
         
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -97,17 +101,17 @@ export function ProductsSection({
           </div>
         )}
 
-        {showViewAll && (
-          <div className="mt-12 flex flex-col items-center">
-            <Link 
-              href={viewAllLink}
-              className="flex md:hidden items-center justify-center gap-2 w-full bg-primary text-white px-8 py-5 rounded-2xl font-bold hover:shadow-lg transition-all"
-            >
-              <span>View All {type === 'featured' ? 'Featured' : 'New Arrivals'}</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-        )}
+          {showViewAll && (
+            <div className="mt-12 flex flex-col items-center">
+              <Link 
+                href={viewAllLink}
+                className="flex md:hidden items-center justify-center gap-2 w-full bg-primary text-white px-8 py-5 rounded-2xl font-bold hover:shadow-lg transition-all"
+              >
+                <span>View All {brand || (type === 'featured' ? 'Featured' : 'New Arrivals')}</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          )}
       </div>
     </section>
   );
