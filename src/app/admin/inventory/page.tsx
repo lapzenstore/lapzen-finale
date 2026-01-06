@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Upload, X, Loader2, Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { applyWatermark } from "@/lib/image-utils";
 
 function LaptopForm({ 
   formData, 
@@ -275,7 +276,16 @@ export default function InventoryPage() {
     const newUrls = [...formData.image_urls];
     try {
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+        let file = files[i];
+        
+        // Apply watermark
+        try {
+          file = await applyWatermark(file);
+        } catch (error) {
+          console.error("Watermark error:", error);
+          // Continue with original file if watermark fails
+        }
+
         const fileName = `${Math.random().toString(36).substring(2)}.${file.name.split('.').pop()}`;
         const { data, error } = await supabase.storage.from('product-images').upload(`products/${fileName}`, file);
         if (error) throw error;
