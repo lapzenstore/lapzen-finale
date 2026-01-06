@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ShoppingCart, Menu, X, Facebook, Instagram, Twitter, Loader2, ArrowRight } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, Facebook, Instagram, Twitter, ArrowRight } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { AnimatePresence, motion } from "framer-motion";
@@ -256,12 +257,12 @@ const Header = () => {
                 </button>
               </div>
 
-              <div className="py-8 max-w-3xl mx-auto">
-                {isLoadingSuggestions ? (
-                  <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-navy" />
-                  </div>
-                ) : suggestions.length > 0 ? (
+                <div className="py-8 max-w-3xl mx-auto">
+                  {isLoadingSuggestions ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader size="sm" />
+                    </div>
+                  ) : suggestions.length > 0 ? (
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Suggestions</h3>
