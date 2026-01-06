@@ -10,6 +10,8 @@ import { SnowfallProvider } from "@/context/snowfall-context";
 import { CartSidebar } from "@/components/cart-sidebar";
 import { JsonLd } from "@/components/schema";
 import SnowfallEffect from "@/components/ui/snowfall-effect";
+import { PageLoader } from "@/components/ui/page-loader";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,14 +29,23 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Lapzen",
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo.png", type: "image/png", sizes: "32x32" },
-      { url: "/logo.png", type: "image/png", sizes: "16x16" },
-      { url: "/logo.png", type: "image/png", sizes: "48x48" },
-    ],
-    shprtcut: ["/logo.png"]
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/logo.png", type: "image/png", sizes: "32x32" },
+        { url: "/logo.png", type: "image/png", sizes: "16x16" },
+        { url: "/logo.png", type: "image/png", sizes: "48x48" },
+      ],
+      shortcut: ["/logo.png"],
+      apple: [
+        { url: "/logo.png", sizes: "180x180", type: "image/png" },
+      ],
+      other:[
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/logo.png",
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
@@ -81,8 +92,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
-        <ErrorReporter />
+        <body className={`${inter.className} antialiased`}>
+          <Suspense fallback={null}>
+            <PageLoader />
+          </Suspense>
+          <ErrorReporter />
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
           strategy="afterInteractive"
@@ -130,5 +144,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
