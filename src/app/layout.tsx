@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lapzen.com"),
+  metadataBase: new URL("https://lapzen.shop"),
   title: "Lapzen - Premium Laptops",
   description: "Your destination for premium laptops. Shop top brands like Apple, Dell, HP, and Asus at competitive prices.",
   openGraph: {
@@ -26,6 +26,24 @@ export const metadata: Metadata = {
     images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Lapzen - Premium Laptops" }],
     type: "website",
     siteName: "Lapzen",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png", sizes: "32x32" },
+      { url: "/logo.png", type: "image/png", sizes: "16x16" },
+      { url: "/logo.png", type: "image/png", sizes: "48x48" },
+    ],
+    shprtcut: ["/logo.png"]
+    apple: [
+      { url: "/logo.png", sizes: "180x180", type: "image/png" },
+    ],
+    other:[
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/logo.png",
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
@@ -39,12 +57,12 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Lapzen",
-  "url": "https://lapzen.com",
-  "logo": "https://ojvgpgjokyjriesqkncz.supabase.co/storage/v1/object/public/test-clones/3703ae26-4d55-4c16-ad94-b7374ad76a02-lapzen-store/assets/svgs/347e75bb-ec5b-455b-be95-96a1d46d0742_096381d0-0717-1.svg",
+  "url": "https://lapzen.shop",
+  "logo": "https://lapzen.shop/logo.png",
   "sameAs": [
-    "https://facebook.com/lapzen",
-    "https://instagram.com/lapzen",
-    "https://twitter.com/lapzen"
+    "https://facebook.com/lap.lapzen",
+    "https://instagram.com/lapzen.store",
+    "https://twitter.com/lapzenstore"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -57,10 +75,10 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Lapzen",
-  "url": "https://lapzen.com",
+  "url": "https://lapzen.shop",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://lapzen.com/search?q={search_term_string}",
+    "target": "https://lapzen.shop/search?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 };
