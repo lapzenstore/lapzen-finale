@@ -7,8 +7,11 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  // if "next" is in search params, use it as the redirect URL
-  let next = searchParams.get('next') || '/reset-password';
+  const nextParam = searchParams.get('next');
+  
+  // Default to /reset-password as it's the most common flow requiring a specific redirect
+  // If next is provided in the URL, use it
+  let next = nextParam || '/reset-password';
 
   if (code) {
     const cookieStore = await cookies();
