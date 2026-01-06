@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { Plus } from "lucide-react";
+import { Plus, Maximize2 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/schema";
+import { ImageLightbox } from "@/components/image-lightbox";
 
 import Link from "next/link";
 import { slugify } from "@/lib/slugify";
@@ -32,6 +33,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const title = product.title || "Untitled Product";
   const image = (product.image_urls && product.image_urls.length > 0)
@@ -116,26 +118,42 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group bg-white border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-navy/20">
       <JsonLd data={productSchema} />
+      <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
         <Link href={`/products/${slug}`}>
-          <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-contain transition-transform duration-500 group-hover:scale-105 p-4"
-              unoptimized={image.startsWith('http')}
-            />
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-contain transition-transform duration-500 group-hover:scale-105 p-4"
+            unoptimized={image.startsWith('http')}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        </Link>
+        
+        <div className="absolute top-4 right-4 flex flex-col gap-2">
           <Button
-            onClick={handleAddToCart}
-            size="sm"
-            className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsLightboxOpen(true);
+            }}
+            size="icon"
+            variant="secondary"
+            className="w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md translate-y-[-10px] group-hover:translate-y-0"
           >
-            <Plus className="w-4 h-4 mr-1" />
-            Add to Cart
+            <Maximize2 className="w-4 h-4" />
           </Button>
         </div>
-      </Link>
+
+        <Button
+          onClick={handleAddToCart}
+          size="sm"
+          className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg"
+        >
+          <Plus className="w-4 h-4 mr-1" />
+          Add to Cart
+        </Button>
+      </div>
       <div className="p-5">
         <div className="flex items-center gap-2 mb-1">
           {product.category && (
@@ -174,6 +192,13 @@ export function ProductCard({ product }: ProductCardProps) {
           </Button>
         </div>
       </div>
+
+      <ImageLightbox 
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        imageSrc={image}
+        altText={title}
+      />
     </div>
   );
 }
