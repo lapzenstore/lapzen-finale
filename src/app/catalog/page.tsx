@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, Suspense, useCallback } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
 import { ProductCard } from "@/components/product-card";
 import { JsonLd } from "@/components/schema";
-import { Search, Filter, SlidersHorizontal, Loader2, X, RotateCcw } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, Loader2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -38,71 +38,31 @@ function CatalogContent() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Active filters from URL
+  // Draft state for filters
+  const [draftMinPrice, setDraftMinPrice] = useState("");
+  const [draftMaxPrice, setDraftMaxPrice] = useState("");
+  const [draftRams, setDraftRams] = useState<string[]>([]);
+  const [draftStorages, setDraftStorages] = useState<string[]>([]);
+
   const activeCategory = searchParams.get("category");
   const activeBrand = searchParams.get("brand");
   const activeSeries = searchParams.get("series");
-  const activeRam = searchParams.get("ram");
-  const activeStorage = searchParams.get("storage");
-  const activeFeatured = searchParams.get("featured");
-  const activeNewArrival = searchParams.get("new_arrival");
   const activeMinPrice = searchParams.get("min_price");
   const activeMaxPrice = searchParams.get("max_price");
-  const activeSearch = searchParams.get("search") || "";
+  const activeRams = searchParams.getAll("ram");
+  const activeStorages = searchParams.getAll("storage");
+  const activeFeatured = searchParams.get("featured");
+  const activeNewArrival = searchParams.get("new_arrival");
 
-  // Draft states for filters (only applied when "Apply Filters" is clicked)
-  const [draftSearch, setDraftSearch] = useState(activeSearch);
-  const [draftMinPrice, setDraftMinPrice] = useState(activeMinPrice || "");
-  const [draftMaxPrice, setDraftMaxPrice] = useState(activeMaxPrice || "");
-  const [draftRam, setDraftRam] = useState(activeRam || "");
-  const [draftStorage, setDraftStorage] = useState(activeStorage || "");
-
-  // Sync draft states when URL params change
+  // Sync draft state with URL params
   useEffect(() => {
-    setDraftSearch(activeSearch);
     setDraftMinPrice(activeMinPrice || "");
     setDraftMaxPrice(activeMaxPrice || "");
-    setDraftRam(activeRam || "");
-    setDraftStorage(activeStorage || "");
-  }, [activeSearch, activeMinPrice, activeMaxPrice, activeRam, activeStorage]);
-
-  const applyFilters = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    
-    // Update all filter params from draft states
-    if (draftSearch) params.set('search', draftSearch);
-    else params.delete('search');
-
-    if (draftMinPrice) params.set('min_price', draftMinPrice);
-    else params.delete('min_price');
-    
-    if (draftMaxPrice) params.set('max_price', draftMaxPrice);
-    else params.delete('max_price');
-    
-    if (draftRam) params.set('ram', draftRam);
-    else params.delete('ram');
-    
-    if (draftStorage) params.set('storage', draftStorage);
-    else params.delete('storage');
-    
-    // Reset to first page if pagination exists (not in current code but good practice)
-    params.delete('page');
-
-    router.push(`/catalog?${params.toString()}`);
-    // Close mobile filters if open
-    if (window.innerWidth < 1024) setShowFilters(false);
-  }, [draftSearch, draftMinPrice, draftMaxPrice, draftRam, draftStorage, searchParams, router]);
-
-  const resetFilters = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('min_price');
-    params.delete('max_price');
-    params.delete('ram');
-    params.delete('storage');
-    params.delete('search');
-    router.push(`/catalog?${params.toString()}`);
-  };
+    setDraftRams(activeRams);
+    setDraftStorages(activeStorages);
+  }, [activeMinPrice, activeMaxPrice, searchParams]); // searchParams dependency captures getAll changes
 
   const getHeroImage = () => {
     if (activeSeries) return HERO_IMAGES[activeSeries.toLowerCase()];
@@ -114,7 +74,7 @@ function CatalogContent() {
   const heroImage = getHeroImage();
   const heroTitle = activeSeries || activeCategory || activeBrand || "Catalog";
 
-  const fetchProducts = useCallback(async () => {
+  const fetchProducts = React.useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -125,9 +85,6 @@ function CatalogContent() {
       if (activeNewArrival) params.set("new_arrival", activeNewArrival);
       if (activeMinPrice) params.set("min_price", activeMinPrice);
       if (activeMaxPrice) params.set("max_price", activeMaxPrice);
-      if (activeRam) params.set("ram", activeRam);
-      if (activeStorage) params.set("storage", activeStorage);
-      if (activeSearch) params.set("search", activeSearch);
       
       const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
@@ -137,17 +94,69 @@ function CatalogContent() {
     } finally {
       setLoading(false);
     }
-  }, [activeCategory, activeBrand, activeSeries, activeFeatured, activeNewArrival, activeMinPrice, activeMaxPrice, activeRam, activeStorage, activeSearch]);
+  }, [activeCategory, activeBrand, activeSeries, activeFeatured, activeNewArrival, activeMinPrice, activeMaxPrice]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  const clearFilter = (key: string) => {
+  const applyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.delete(key);
+    params.delete("min_price");
+    params.delete("max_price");
+    params.delete("ram");
+    params.delete("storage");
+
+    if (draftMinPrice) params.set("min_price", draftMinPrice);
+    if (draftMaxPrice) params.set("max_price", draftMaxPrice);
+    draftRams.forEach(ram => params.append("ram", ram));
+    draftStorages.forEach(storage => params.append("storage", storage));
+
     router.push(`/catalog?${params.toString()}`);
   };
+
+  const clearFilter = (key: string, value?: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      const values = params.getAll(key).filter(v => v !== value);
+      params.delete(key);
+      values.forEach(v => params.append(key, v));
+    } else {
+      params.delete(key);
+    }
+    router.push(`/catalog?${params.toString()}`);
+  };
+
+  const resetFilters = () => {
+    setDraftMinPrice("");
+    setDraftMaxPrice("");
+    setDraftRams([]);
+    setDraftStorages([]);
+    
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("min_price");
+    params.delete("max_price");
+    params.delete("ram");
+    params.delete("storage");
+    router.push(`/catalog?${params.toString()}`);
+  };
+
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         p.brand?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesRam = activeRams.length === 0 || activeRams.some(ram => 
+      p.ram_size?.toLowerCase().includes(ram.toLowerCase()) || 
+      p.specs?.ram?.toLowerCase().includes(ram.toLowerCase())
+    );
+
+    const matchesStorage = activeStorages.length === 0 || activeStorages.some(storage => 
+      p.storage_size?.toLowerCase().includes(storage.toLowerCase()) ||
+      p.specs?.storage?.toLowerCase().includes(storage.toLowerCase())
+    );
+    
+    return matchesSearch && matchesRam && matchesStorage;
+  });
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -209,46 +218,37 @@ function CatalogContent() {
                     <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('brand')} />
                   </span>
                 )}
-                {activeSeries && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-white text-xs font-bold">
-                    {activeSeries}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('series')} />
-                  </span>
-                )}
-                {activeMinPrice && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
-                    Min: {activeMinPrice}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('min_price')} />
-                  </span>
-                )}
-                {activeMaxPrice && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
-                    Max: {activeMaxPrice}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('max_price')} />
-                  </span>
-                )}
-                {activeRam && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-bold">
-                    RAM: {activeRam}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('ram')} />
-                  </span>
-                )}
-                {activeStorage && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-600 text-white text-xs font-bold">
-                    SSD: {activeStorage}
-                    <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('storage')} />
-                  </span>
-                )}
-                {(activeMinPrice || activeMaxPrice || activeRam || activeStorage || activeSearch) && (
-                  <button 
-                    onClick={resetFilters}
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-500 text-xs font-bold hover:bg-gray-200 transition-colors"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    Clear All
-                  </button>
-                )}
-              </div>
+                  {activeSeries && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-white text-xs font-bold">
+                      {activeSeries}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('series')} />
+                    </span>
+                  )}
+                  {activeMinPrice && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
+                      Min: {activeMinPrice}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('min_price')} />
+                    </span>
+                  )}
+                  {activeMaxPrice && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-600 text-white text-xs font-bold">
+                      Max: {activeMaxPrice}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('max_price')} />
+                    </span>
+                  )}
+                  {activeRams.map(ram => (
+                    <span key={ram} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-600 text-white text-xs font-bold">
+                      RAM: {ram}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('ram', ram)} />
+                    </span>
+                  ))}
+                  {activeStorages.map(storage => (
+                    <span key={storage} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-bold">
+                      Storage: {storage}
+                      <X className="w-3 h-3 cursor-pointer" onClick={() => clearFilter('storage', storage)} />
+                    </span>
+                  ))}
+                </div>
             </div>
 
             <div className="flex items-center gap-3">
@@ -256,22 +256,20 @@ function CatalogContent() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input 
                   type="text"
-                  placeholder="Search and click apply..."
+                  placeholder="Search laptops..."
                   className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-100 focus:outline-none focus:ring-4 focus:ring-navy/5 focus:border-navy transition-all"
-                  value={draftSearch}
-                  onChange={(e) => setDraftSearch(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <button 
                 onClick={() => setShowFilters(!showFilters)}
                 className={cn(
-                  "p-3 rounded-2xl border transition-all flex items-center gap-2",
-                  showFilters ? "bg-navy text-[#00172E] border-navy shadow-lg" : "bg-white text-navy border-gray-100 hover:bg-gray-50 shadow-sm"
+                  "p-3 rounded-2xl border transition-all",
+                  showFilters ? "bg-navy text-white border-navy" : "bg-white text-navy border-gray-100 hover:bg-gray-50"
                 )}
               >
                 <SlidersHorizontal className="w-6 h-6" />
-                <span className="font-bold text-sm hidden sm:inline">Filters</span>
               </button>
             </div>
           </div>
@@ -279,78 +277,79 @@ function CatalogContent() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
             {showFilters && (
               <aside className="lg:col-span-1 space-y-8 animate-in fade-in slide-in-from-left duration-300">
-                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-8 sticky top-24">
-                  <div>
-                    <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4 flex items-center justify-between">
-                      Price Range
-                    </h3>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label className="text-[10px] font-bold text-gray-400 uppercase">Min</label>
-                          <input 
-                            type="number" 
-                            placeholder="0"
-                            className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
-                            value={draftMinPrice}
-                            onChange={(e) => setDraftMinPrice(e.target.value)}
-                          />
+                <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-8">
+                    <div>
+                      <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">Price Range</h3>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">Min</label>
+                            <input 
+                              type="number" 
+                              placeholder="0"
+                              className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
+                              value={draftMinPrice}
+                              onChange={(e) => setDraftMinPrice(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase">Max</label>
+                            <input 
+                              type="number" 
+                              placeholder="500000"
+                              className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
+                              value={draftMaxPrice}
+                              onChange={(e) => setDraftMaxPrice(e.target.value)}
+                            />
+                          </div>
                         </div>
-                        <div>
-                          <label className="text-[10px] font-bold text-gray-400 uppercase">Max</label>
-                          <input 
-                            type="number" 
-                            placeholder="500000"
-                            className="w-full px-3 py-2 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-navy/5 text-sm"
-                            value={draftMaxPrice}
-                            onChange={(e) => setDraftMaxPrice(e.target.value)}
-                          />
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { label: '< 50k', min: '0', max: '50000' },
+                            { label: '50k - 100k', min: '50000', max: '100000' },
+                            { label: '100k - 200k', min: '100000', max: '200000' },
+                            { label: '200k+', min: '200000', max: '' },
+                          ].map((range) => (
+                            <button
+                              key={range.label}
+                              onClick={() => {
+                                if (draftMinPrice === range.min && draftMaxPrice === range.max) {
+                                  setDraftMinPrice("");
+                                  setDraftMaxPrice("");
+                                } else {
+                                  setDraftMinPrice(range.min);
+                                  setDraftMaxPrice(range.max);
+                                }
+                              }}
+                              className={cn(
+                                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all border",
+                                draftMinPrice === range.min && draftMaxPrice === range.max
+                                  ? "bg-navy text-white border-navy"
+                                  : "bg-gray-50 text-gray-600 border-gray-100 hover:border-navy/20"
+                              )}
+                            >
+                              {range.label}
+                            </button>
+                          ))}
                         </div>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {[
-                          { label: '< 50k', min: '0', max: '50000' },
-                          { label: '50k - 100k', min: '50000', max: '100000' },
-                          { label: '100k - 200k', min: '100000', max: '200000' },
-                          { label: '200k+', min: '200000', max: '' },
-                        ].map((range) => (
-                          <button
-                            key={range.label}
-                            onClick={() => {
-                              if (draftMinPrice === range.min && draftMaxPrice === range.max) {
-                                setDraftMinPrice("");
-                                setDraftMaxPrice("");
-                              } else {
-                                setDraftMinPrice(range.min);
-                                setDraftMaxPrice(range.max);
-                              }
-                            }}
-                            className={cn(
-                              "px-3 py-1.5 rounded-lg text-xs font-bold transition-all border",
-                              draftMinPrice === range.min && draftMaxPrice === range.max
-                                ? "bg-navy text-white border-navy"
-                                : "bg-gray-50 text-gray-600 border-gray-100 hover:border-navy/20"
-                            )}
-                          >
-                            {range.label}
-                          </button>
-                        ))}
                       </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
+                    <div>
+                      <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
                     <div className="space-y-2">
                       {['4GB','8GB', '16GB', '32GB', '64GB'].map((ram) => (
                         <label key={ram} className="flex items-center gap-3 cursor-pointer group">
                           <input 
                             type="checkbox" 
                             className="w-5 h-5 rounded-lg border-gray-200 text-navy focus:ring-navy"
-                            checked={draftRam === ram}
+                            checked={draftRams.includes(ram)}
                             onChange={() => {
-                              if (draftRam === ram) setDraftRam("");
-                              else setDraftRam(ram);
+                              if (draftRams.includes(ram)) {
+                                setDraftRams(draftRams.filter(r => r !== ram));
+                              } else {
+                                setDraftRams([...draftRams, ram]);
+                              }
                             }}
                           />
                           <span className="text-sm font-medium text-gray-600 group-hover:text-navy transition-colors">{ram}</span>
@@ -367,10 +366,13 @@ function CatalogContent() {
                           <input 
                             type="checkbox" 
                             className="w-5 h-5 rounded-lg border-gray-200 text-navy focus:ring-navy"
-                            checked={draftStorage === storage}
+                            checked={draftStorages.includes(storage)}
                             onChange={() => {
-                              if (draftStorage === storage) setDraftStorage("");
-                              else setDraftStorage(storage);
+                              if (draftStorages.includes(storage)) {
+                                setDraftStorages(draftStorages.filter(s => s !== storage));
+                              } else {
+                                setDraftStorages([...draftStorages, storage]);
+                              }
                             }}
                           />
                           <span className="text-sm font-medium text-gray-600 group-hover:text-navy transition-colors">{storage}</span>
@@ -379,25 +381,18 @@ function CatalogContent() {
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-gray-100 flex flex-col gap-3">
-                    <button 
+                  <div className="pt-4 space-y-3">
+                    <button
                       onClick={applyFilters}
-                      className="w-full py-4 bg-navy text-[#00172E] rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-navy/90 transition-all shadow-xl shadow-navy/20 hover:scale-[1.02] active:scale-[0.98]"
+                      className="w-full py-3 bg-navy text-[#00172E] rounded-2xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
                     >
                       Apply Filters
                     </button>
-                    <button 
-                      onClick={() => {
-                        setDraftMinPrice("");
-                        setDraftMaxPrice("");
-                        setDraftRam("");
-                        setDraftStorage("");
-                        setDraftSearch("");
-                        resetFilters();
-                      }}
-                      className="w-full py-3 bg-white text-gray-400 rounded-xl font-bold text-xs uppercase tracking-widest hover:text-navy hover:bg-gray-50 transition-all"
+                    <button
+                      onClick={resetFilters}
+                      className="w-full py-3 bg-gray-50 text-gray-400 rounded-2xl font-bold text-sm hover:bg-gray-100 transition-all"
                     >
-                      Reset Sidebar
+                      Reset All
                     </button>
                   </div>
                 </div>
@@ -411,22 +406,14 @@ function CatalogContent() {
               {loading ? (
                 <div className="col-span-full py-20 flex flex-col items-center justify-center text-gray-400">
                   <Loader2 className="w-10 h-10 animate-spin mb-4 text-navy/20" />
-                  <p className="font-bold uppercase tracking-widest text-xs">Updating catalog...</p>
+                  <p className="font-medium">Updating catalog...</p>
                 </div>
-              ) : products.length === 0 ? (
-                <div className="col-span-full py-20 text-center bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
-                  <Filter className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-                  <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">No results found</p>
-                  <p className="text-gray-400 text-sm mt-2">Try adjusting your filters or search terms.</p>
-                  <button 
-                    onClick={resetFilters}
-                    className="mt-6 text-navy font-black text-xs uppercase tracking-widest hover:underline"
-                  >
-                    Clear all filters
-                  </button>
+              ) : filteredProducts.length === 0 ? (
+                <div className="col-span-full py-20 text-center bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-100">
+                  <p className="text-gray-400 font-medium">No laptops found matching your criteria.</p>
                 </div>
               ) : (
-                products.map((product) => (
+                filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))
               )}
