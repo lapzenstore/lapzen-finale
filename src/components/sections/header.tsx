@@ -183,7 +183,7 @@ const Header = () => {
                     <Facebook size={16} fill="currentColor" strokeWidth={0} />
                   </a>
                   <a
-                    href="https://www.instagram.com/lapzenstore"
+                    href="https://www.instagram.com/lapzen.store"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
