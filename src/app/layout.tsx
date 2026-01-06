@@ -35,12 +35,6 @@ export const metadata: Metadata = {
       { url: "/logo.png", type: "image/png", sizes: "48x48" },
     ],
     shprtcut: ["/logo.png"]
-    other:[
-      {
-        rel: "apple-touch-icon-precomposed",
-        url: "/logo.png",
-      }
-    ]
   },
   twitter: {
     card: "summary_large_image",
@@ -136,4 +130,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
