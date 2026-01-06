@@ -3,33 +3,50 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, ArrowRight, ArrowLeft } from "lucide-react";
+import { Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
+export default function ResetPasswordPage() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
-    setMessage("");
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      const { error } = await supabase.auth.updateUser({
+        password: password
       });
 
       if (error) throw error;
       
-      setMessage("Password reset link has been sent to your email.");
+      setMessage("Your password has been reset successfully.");
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     } catch (err: any) {
-      setError(err.message || "Failed to send reset link");
+      setError(err.message || "Failed to update password");
     } finally {
       setIsLoading(false);
     }
@@ -57,12 +74,12 @@ export default function ForgotPasswordPage() {
             <span className="text-4xl font-bold tracking-tighter text-white">Lapzen</span>
           </Link>
           <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
-            Recover your
+            Set your new
             <br />
-            <span className="text-white/80">account access</span>
+            <span className="text-white/80">password</span>
           </h1>
           <p className="text-white/60 text-lg max-w-md">
-            Enter your email address and we'll send you a link to reset your password.
+            Please enter your new password below. Make sure it's strong and secure.
           </p>
         </div>
       </div>
@@ -85,13 +102,9 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div className="mb-8">
-            <Link href="/login" className="text-sm font-medium text-navy flex items-center gap-2 hover:underline mb-6">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Sign In
-            </Link>
-            <h2 className="text-3xl font-bold text-navy mb-2">Forgot Password</h2>
+            <h2 className="text-3xl font-bold text-navy mb-2">Reset Password</h2>
             <p className="text-muted-foreground">
-              We'll send you instructions to reset your password.
+              Enter and confirm your new password.
             </p>
           </div>
 
@@ -103,22 +116,44 @@ export default function ForgotPasswordPage() {
 
           {message && (
             <div className="mb-6 p-4 bg-green-50 border border-green-100 text-green-600 text-sm rounded-lg">
-              {message}
+              {message} Redirecting to login...
             </div>
           )}
 
           {!message && (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-navy">Email Address</label>
+                <label className="text-sm font-medium text-navy">New Password</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-12 h-12 bg-card border-border focus:border-navy"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter new password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-12 pr-12 h-12 bg-card border-border focus:border-navy"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-navy"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-navy">Confirm Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Confirm new password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-12 pr-12 h-12 bg-card border-border focus:border-navy"
                     required
                   />
                 </div>
@@ -128,11 +163,11 @@ export default function ForgotPasswordPage() {
                 {isLoading ? (
                   <span className="flex items-center gap-2">
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Sending Link...
+                    Updating Password...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    Send Reset Link
+                    Update Password
                     <ArrowRight className="w-5 h-5" />
                   </span>
                 )}
@@ -143,7 +178,7 @@ export default function ForgotPasswordPage() {
           {message && (
             <Link href="/login">
               <Button className="w-full h-12 text-base font-semibold">
-                Return to Login
+                Go to Login
               </Button>
             </Link>
           )}
