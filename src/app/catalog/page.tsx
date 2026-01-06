@@ -384,7 +384,7 @@ function CatalogContent() {
                   <div className="pt-4 space-y-3">
                     <button
                       onClick={applyFilters}
-                      className="w-full py-3 bg-navy text-white rounded-2xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
+                      className="w-full py-3 bg-navy text-[#00172E] rounded-2xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
                     >
                       Apply Filters
                     </button>
@@ -434,5 +434,6 @@ export default function CatalogPage() {
     </Suspense>
   );
 }
+
 
 
