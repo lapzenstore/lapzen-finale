@@ -338,7 +338,7 @@ function CatalogContent() {
                     <div>
                       <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">RAM Size</h3>
                     <div className="space-y-2">
-                      {['4GB','8GB', '16GB', '32GB', '64GB'].map((ram) => (
+                      {['4GB', '8GB', '16GB', '32GB', '64GB'].map((ram) => (
                         <label key={ram} className="flex items-center gap-3 cursor-pointer group">
                           <input 
                             type="checkbox" 
@@ -361,7 +361,7 @@ function CatalogContent() {
                   <div>
                     <h3 className="text-sm font-black text-navy uppercase tracking-widest mb-4">Storage</h3>
                     <div className="space-y-2">
-                      {['128GB','256GB', '512GB', '1TB', '2TB'].map((storage) => (
+                      {['128GB', '256GB', '512GB', '1TB', '2TB'].map((storage) => (
                         <label key={storage} className="flex items-center gap-3 cursor-pointer group">
                           <input 
                             type="checkbox" 
@@ -384,7 +384,7 @@ function CatalogContent() {
                   <div className="pt-4 space-y-3">
                     <button
                       onClick={applyFilters}
-                      className="w-full py-3 bg-navy text-[#00172E] rounded-2xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
+                      className="w-full py-3 bg-navy text-white rounded-2xl font-bold text-sm hover:bg-navy/90 transition-all shadow-lg shadow-navy/10"
                     >
                       Apply Filters
                     </button>
