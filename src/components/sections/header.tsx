@@ -175,7 +175,7 @@ const Header = () => {
             <div className="flex items-center gap-4 lg:gap-6">
               <div className="hidden lg:flex items-center gap-3 border-r border-black/10 pr-6 mr-2">
                   <a
-                    href="https://web.facebook.com/lap.lapzen"
+                    href="https://web.facebook.com/lapzen.store"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
