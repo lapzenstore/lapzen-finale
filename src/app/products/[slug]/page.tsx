@@ -50,6 +50,38 @@ async function getRelatedProducts(brand: string, currentId: string) {
   }
 }
 
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const product = await getProductBySlug(params.slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found | Lapzen",
+    };
+  }
+
+  const imageUrl = product.image_urls?.[0] || product.image_url;
+
+  return {
+    title: `${product.title} | Lapzen`,
+    description: product.description?.slice(0, 160) || `Buy ${product.title} at Lapzen. Premium laptops at competitive prices.`,
+    openGraph: {
+      title: product.title,
+      description: product.description?.slice(0, 160),
+      images: imageUrl ? [{ url: imageUrl }] : ["/logo.png"],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: product.description?.slice(0, 160),
+      images: imageUrl ? [imageUrl] : ["/logo.png"],
+    },
+  };
+}
+
 export default async function ProductPage(props: {
   params: Promise<{ slug: string }>;
 }) {
@@ -140,3 +172,4 @@ export default async function ProductPage(props: {
     </div>
   );
 }
+v
