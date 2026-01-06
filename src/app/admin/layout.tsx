@@ -3,7 +3,7 @@
 import React from "react";
 import Header from "@/components/sections/header";
 import Image from "next/image";
-import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, ExternalLink, Menu, X } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, ExternalLink, Menu, X, Settings } from "lucide-react";
 import { SnowfallToggle } from "@/components/ui/snowfall-toggle";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -32,6 +32,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: "Inventory", href: "/admin/inventory", icon: Package },
     { label: "Sales Orders", href: "/admin/orders", icon: ShoppingCart },
     { label: "Users", href: "/admin/users", icon: Users },
+    { label: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
   return (
