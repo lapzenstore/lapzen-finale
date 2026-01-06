@@ -1,28 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client"
 
 export default function ResetPasswordPage() {
-    const supabase = createClient();
+  const supabase = createClient();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    async function getSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user?.email) {
+        setSessionEmail(session.user.email);
+      }
+    }
+    getSession();
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setError("");
+    setMessage("");
+
+    if (sessionEmail && email.toLowerCase() !== sessionEmail.toLowerCase()) {
+      setError("The email provided does not match the account associated with this reset link.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -34,7 +52,6 @@ export default function ResetPasswordPage() {
     }
 
     setIsLoading(true);
-    setError("");
 
     try {
       const { error } = await supabase.auth.updateUser({
@@ -76,12 +93,12 @@ export default function ResetPasswordPage() {
             <span className="text-4xl font-bold tracking-tighter text-white">Lapzen</span>
           </Link>
           <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
-            Set your new
+            Secure your
             <br />
-            <span className="text-white/80">password</span>
+            <span className="text-white/80">new password</span>
           </h1>
           <p className="text-white/60 text-lg max-w-md">
-            Please enter your new password below. Make sure it's strong and secure.
+            For your security, please verify your email and set a new strong password for your account.
           </p>
         </div>
       </div>
@@ -106,24 +123,40 @@ export default function ResetPasswordPage() {
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-navy mb-2">Reset Password</h2>
             <p className="text-muted-foreground">
-              Enter and confirm your new password.
+              Please enter your email and new password details.
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-lg">
-              {error}
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl flex gap-3">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
           {message && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-100 text-green-600 text-sm rounded-lg">
+            <div className="mb-6 p-4 bg-green-50 border border-green-100 text-green-600 text-sm rounded-xl">
               {message} Redirecting to login...
             </div>
           )}
 
           {!message && (
             <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-navy">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-12 h-12 bg-card border-border focus:border-navy"
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium text-navy">New Password</label>
                 <div className="relative">
@@ -161,11 +194,11 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={isLoading}>
+              <Button type="submit" className="w-full h-12 text-base font-semibold rounded-xl" disabled={isLoading}>
                 {isLoading ? (
                   <span className="flex items-center gap-2">
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Updating Password...
+                    Updating...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
@@ -179,7 +212,7 @@ export default function ResetPasswordPage() {
 
           {message && (
             <Link href="/login">
-              <Button className="w-full h-12 text-base font-semibold">
+              <Button className="w-full h-12 text-base font-semibold rounded-xl">
                 Go to Login
               </Button>
             </Link>
