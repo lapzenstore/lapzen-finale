@@ -92,9 +92,9 @@ const FooterSection = () => {
             <ul className="list-none p-0 m-0">
                 {[
                 { label: 'Sign Up', href: '/signup' },
-                { label: 'My Account', href: '/login' },
+                { label: 'My Account', href: '/account' },
                 { label: 'Shopping Cart', href: '/cart' },
-                { label: 'Order History', href: '/login' }].
+                { label: 'Order History', href: '/my-orders' }].
                 map((link) =>
               <li key={link.label}>
                   <a
@@ -213,5 +213,6 @@ const FooterSection = () => {
     </footer>);
 
 };
+
 
 export default FooterSection;
