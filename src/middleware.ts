@@ -4,6 +4,14 @@ import { updateSession } from "@/lib/supabase/middleware";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Handle Supabase auth code redirect (sometimes it goes to root instead of /auth/callback)
+  const code = request.nextUrl.searchParams.get("code");
+  if (code && pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/callback";
+    return NextResponse.redirect(url);
+  }
+
   // Protect admin routes
   if (pathname.startsWith("/admin")) {
     // Allow access to login page
