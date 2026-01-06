@@ -6,9 +6,20 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get('code');
-  // if "next" is in search params, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/';
+    const code = searchParams.get('code');
+    // if "next" is in search params, use it as the redirect URL
+    let next = searchParams.get('next') ?? '/';
+
+    // Handle potential double encoding or absolute URLs
+    if (next.startsWith('http')) {
+      try {
+        const nextUrl = new URL(next);
+        next = nextUrl.pathname + nextUrl.search;
+      } catch (e) {
+        next = '/';
+      }
+    }
+
 
   if (code) {
     const cookieStore = await cookies();
