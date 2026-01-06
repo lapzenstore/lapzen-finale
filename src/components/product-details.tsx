@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Plus, Minus, ShoppingCart, Zap, Shield, Truck, RotateCcw } from "lucide-react";
+import { Plus, Minus, ShoppingCart, Zap, Shield, Truck, RotateCcw, Maximize2 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
+import { ImageLightbox } from "@/components/image-lightbox";
 
 interface Product {
   id: string;
@@ -26,6 +27,7 @@ interface Product {
 export function ProductDetails({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const { addItem, setIsOpen } = useCart();
   const router = useRouter();
 
@@ -73,15 +75,21 @@ export function ProductDetails({ product }: { product: Product }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
       {/* Image Gallery */}
       <div className="space-y-4">
-        <div className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8">
+        <div 
+          className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8 cursor-zoom-in group/image"
+          onClick={() => setIsLightboxOpen(true)}
+        >
           <Image
             src={images[selectedImage]}
             alt={product.title}
             fill
-            className="object-contain"
+            className="object-contain transition-transform duration-500 group-hover/image:scale-105"
             priority
             unoptimized={images[selectedImage].startsWith('http')}
           />
+          <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover/image:opacity-100 transition-opacity shadow-sm border border-border">
+            <Maximize2 className="w-5 h-5 text-navy" />
+          </div>
         </div>
         {images.length > 1 && (
           <div className="grid grid-cols-5 gap-4">
@@ -241,6 +249,13 @@ export function ProductDetails({ product }: { product: Product }) {
           </div>
         </div>
       </div>
+
+      <ImageLightbox 
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        imageSrc={images[selectedImage]}
+        altText={product.title}
+      />
     </div>
   );
 }
