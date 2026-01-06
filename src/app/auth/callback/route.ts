@@ -6,26 +6,15 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-    const code = searchParams.get('code');
-    // if "next" is in search params, use it as the redirect URL
-    let next = searchParams.get('next') ?? '/';
-
-    // Handle potential double encoding or absolute URLs
-    if (next.startsWith('http')) {
-      try {
-        const nextUrl = new URL(next);
-        next = nextUrl.pathname + nextUrl.search;
-      } catch (e) {
-        next = '/';
-      }
-    }
-
+  const code = searchParams.get('code');
+  // if "next" is in search params, use it as the redirect URL
+  let next = searchParams.get('next') || '/reset-password';
 
   if (code) {
     const cookieStore = await cookies();
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
           getAll() {
@@ -45,12 +34,24 @@ export async function GET(request: Request) {
         },
       }
     );
+
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+    
     if (!error) {
+      // Ensure next is a relative path to prevent open redirect vulnerabilities
+      if (next.startsWith('http')) {
+        try {
+          const nextUrl = new URL(next);
+          next = nextUrl.pathname + nextUrl.search;
+        } catch {
+          next = '/reset-password';
+        }
+      }
+      
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
-  // return the user to an error page with instructions
+  // If there's no code or an error occurred, redirect to login with error
   return NextResponse.redirect(`${origin}/login?error=auth-callback-failed`);
 }
