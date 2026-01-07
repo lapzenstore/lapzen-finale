@@ -186,8 +186,8 @@ const FooterSection = () => {
 
         </div>
         <div class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="695e459fe66451fcf34cb871" data-style-height="52px" data-style-width="100%" data-token="304a56bc-adad-479a-b594-a77d80dc8fdd">
-  <a href="https://www.trustpilot.com/review/lapzen.shop" target="_blank" rel="noopener">Trustpilot</a>
-</div>
+          <a href="https://www.trustpilot.com/review/lapzen.shop" target="_blank" rel="noopener">Trustpilot</a>
+        </div>
 
         {/* Footer Bottom Strip */}
         <div className="pt-[30px] border-t border-white/10 flex justify-between items-center text-[12px] opacity-60">
@@ -219,4 +219,5 @@ const FooterSection = () => {
 
 
 export default FooterSection;
+
 
