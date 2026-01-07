@@ -82,6 +82,7 @@ export default function RootLayout({
             <PageLoader />
           </Suspense>
           <ErrorReporter />
+        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
           strategy="afterInteractive"
@@ -129,4 +130,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
