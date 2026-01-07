@@ -197,7 +197,7 @@ const WarrantyTabs = () => {
                             </li>
                             <li className="flex items-start gap-4 text-slate-600 text-lg">
                                 <div className="mt-2 w-2 h-2 rounded-full bg-[#00172E] shrink-0" />
-                                <span>Same day delivery available in Karachi</span>
+                                <span>Same day delivery available in Lahore</span>
                             </li>
                         </ul>
                     </div>
@@ -233,4 +233,5 @@ const WarrantyTabs = () => {
 };
 
 export default WarrantyTabs;
+
 
