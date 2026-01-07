@@ -100,7 +100,7 @@ const WarrantyTabs = () => {
                 </div>
 
                 <div className="mt-16 p-10 bg-[#00172E] text-white rounded-3xl shadow-xl shadow-[#00172E]/10">
-                    <h4 className="text-[20px] font-bold mb-4 uppercase tracking-widest">How to claim:</h4>
+                    <h4 className="text-[20px] font-bold text-white mb-4 uppercase tracking-widest">How to claim:</h4>
                     <p className="text-white/80 text-lg leading-relaxed">
                         Contact our dedicated support team at <strong className="text-white">support@lapzen.com</strong> with your order ID and a brief description of the issue. Most claims are processed within 48 hours.
                     </p>
@@ -233,3 +233,4 @@ const WarrantyTabs = () => {
 };
 
 export default WarrantyTabs;
+
