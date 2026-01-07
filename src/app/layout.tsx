@@ -30,22 +30,7 @@ export const metadata: Metadata = {
     siteName: "Lapzen",
   },
     icons: {
-      icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/logo.png", type: "image/png", sizes: "32x32" },
-        { url: "/logo.png", type: "image/png", sizes: "16x16" },
-        { url: "/logo.png", type: "image/png", sizes: "48x48" },
-      ],
-      shortcut: ["/logo.png"],
-      apple: [
-        { url: "/logo.png", sizes: "180x180", type: "image/png" },
-      ],
-      other:[
-      {
-        rel: "apple-touch-icon-precomposed",
-        url: "/logo.png",
-      }
-    ]
+      icon: "/favicon.ico",
   },
   twitter: {
     card: "summary_large_image",
@@ -144,3 +129,4 @@ export default function RootLayout({
     </html>
   );
 }
+
