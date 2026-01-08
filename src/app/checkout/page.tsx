@@ -290,18 +290,32 @@ function SuccessState({ onContinue }: { onContinue: () => void }) {
   );
 }
 
-export default function CheckoutPage() {
-  const { items, total, clearCart } = useCart();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [customerDetails, setCustomerDetails] = useState({ 
-    name: "", 
-    email: "", 
-    phone: "", 
-    address: "" 
-  });
+  export default function CheckoutPage() {
+    const { items, total, clearCart } = useCart();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [customerDetails, setCustomerDetails] = useState({ 
+      name: "", 
+      email: "", 
+      phone: "", 
+      address: "" 
+    });
+  
+    useEffect(() => {
+      if (items.length > 0) {
+        import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+          trackMetaEvent('InitiateCheckout', {
+            content_ids: items.map(i => i.id),
+            content_type: 'product',
+            value: total,
+            currency: 'PKR',
+            num_items: items.reduce((acc, i) => acc + i.quantity, 0),
+          });
+        });
+      }
+    }, []);
 
-  const handleLocalSuccess = async (method: PaymentMethod, paymentData: any) => {
+    const handleLocalSuccess = async (method: PaymentMethod, paymentData: any) => {
     try {
       // Save order to database with payment info inside customer_details
       const response = await fetch("/api/orders", {
@@ -327,9 +341,23 @@ export default function CheckoutPage() {
         throw new Error("Failed to save order");
       }
 
-      setIsSuccess(true);
-      clearCart();
-    } catch (err) {
+        setIsSuccess(true);
+        clearCart();
+
+        // Track Purchase event
+        import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+          trackMetaEvent('Purchase', {
+            content_ids: items.map(i => i.id),
+            content_type: 'product',
+            value: total,
+            currency: 'PKR',
+            num_items: items.reduce((acc, i) => acc + i.quantity, 0),
+          }, {
+            email: customerDetails.email,
+            phone: customerDetails.phone,
+          });
+        });
+      } catch (err) {
       console.error("Error saving order:", err);
       alert("There was an error submitting your order. Please try again.");
     }
