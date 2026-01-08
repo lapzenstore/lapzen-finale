@@ -16,9 +16,11 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
       // Draw original image
       ctx.drawImage(img, 0, 0);
 
-      // Load logo
-      const logo = new Image();
-      logo.src = logoUrl;
+    // Load logo
+    const logo = new Image();
+    
+    const applyLogo = (imgSrc: string) => {
+      logo.src = imgSrc;
       logo.onload = () => {
         // Calculate logo size (e.g., 15% of image width)
         const logoWidth = canvas.width * 0.15;
@@ -34,15 +36,6 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
         ctx.drawImage(logo, x, y, logoWidth, logoHeight);
         ctx.globalAlpha = 1.0;
 
-        // Optional: Center watermark too if needed for stronger protection
-        /*
-        const centerX = (canvas.width - logoWidth) / 2;
-        const centerY = (canvas.height - logoHeight) / 2;
-        ctx.globalAlpha = 0.2;
-        ctx.drawImage(logo, centerX, centerY, logoWidth, logoHeight);
-        ctx.globalAlpha = 1.0;
-        */
-
         // Convert back to file
         canvas.toBlob((blob) => {
           if (blob) {
@@ -57,7 +50,28 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
         }, file.type);
         
         URL.revokeObjectURL(img.src);
+        if (imgSrc.startsWith('blob:')) {
+          URL.revokeObjectURL(imgSrc);
+        }
       };
+      logo.onerror = () => {
+        console.error('Failed to load watermark logo');
+        resolve(file);
+      };
+    };
+
+    // Try to fetch logo first to avoid CORS issues
+    fetch(logoUrl, { mode: 'cors' })
+      .then(res => res.blob())
+      .then(blob => {
+        applyLogo(URL.createObjectURL(blob));
+      })
+      .catch(err => {
+        console.warn('CORS fetch failed, falling back to direct load', err);
+        logo.crossOrigin = "anonymous";
+        applyLogo(logoUrl + (logoUrl.includes('?') ? '&' : '?') + 't=' + Date.now());
+      });
+
       logo.onerror = () => {
         // If logo fails to load, resolve with original file but log error
         console.error('Failed to load watermark logo');
