@@ -32,20 +32,7 @@ const AnnouncementBar = () => {
 
 };
 
-const seriesMapping: { [key: string]: string } = {
-  "hp-omen": "HP Omen",
-  "hp-zbook": "HP Zbook",
-  "hp-elitebook": "HP Elitebook",
-  "dell-precision": "Dell Precision",
-  "dell-latitude": "Dell Latitude",
-  "dell-xps": "Dell XPS",
-  "lenovo-legion": "Lenovo Legion",
-  "lenovo-thinkpad": "Lenovo ThinkPad",
-  "lenovo-thinkbook": "Lenovo Thinkbook",
-  "apple-macbook": "Apple Macbook",
-  "toshiba": "Toshiba",
-  "asus": "Asus"
-};
+import { SERIES_MAPPING } from "@/lib/constants";
 
 const Header = () => {
   const { itemCount } = useCart();
@@ -75,7 +62,7 @@ const Header = () => {
       }
 
       // Filter series locally from mapping
-      const filteredSeries = Object.entries(seriesMapping)
+      const filteredSeries = Object.entries(SERIES_MAPPING)
         .filter(([slug, name]) => 
           name.toLowerCase().includes(searchQuery.toLowerCase())
         )
