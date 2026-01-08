@@ -32,7 +32,7 @@ const AnnouncementBar = () => {
 
 };
 
-import { SERIES_MAPPING } from "@/lib/constants";
+import { SERIES_MAPPING, CATEGORIES } from "@/lib/constants";
 
 const Header = () => {
   const { itemCount } = useCart();
@@ -46,6 +46,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [matchingSeries, setMatchingSeries] = useState<{slug: string, name: string}[]>([]);
+  const [matchingCategories, setMatchingCategories] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const router = useRouter();
 
@@ -58,17 +59,26 @@ const Header = () => {
       if (searchQuery.trim().length < 2) {
         setSuggestions([]);
         setMatchingSeries([]);
+        setMatchingCategories([]);
         return;
       }
+
+      const normalizedSearch = searchQuery.toLowerCase();
 
       // Filter series locally from mapping
       const filteredSeries = Object.entries(SERIES_MAPPING)
         .filter(([slug, name]) => 
-          name.toLowerCase().includes(searchQuery.toLowerCase())
+          name.toLowerCase().includes(normalizedSearch)
         )
         .map(([slug, name]) => ({ slug, name }))
         .slice(0, 3);
       setMatchingSeries(filteredSeries);
+
+      // Filter categories locally
+      const filteredCategories = CATEGORIES.filter(cat => 
+        cat.toLowerCase().includes(normalizedSearch)
+      ).slice(0, 3);
+      setMatchingCategories(filteredCategories);
 
       setIsLoadingSuggestions(true);
       try {
@@ -272,30 +282,42 @@ const Header = () => {
               </div>
 
                 <div className="py-8 max-w-3xl mx-auto">
-                  {isLoadingSuggestions ? (
-                    <div className="flex items-center justify-center py-12">
-                      <Loader size="sm" />
-                    </div>
-                    ) : (suggestions.length > 0 || matchingSeries.length > 0) ? (
-                    <div className="space-y-8">
-                      {matchingSeries.length > 0 && (
-                        <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                          <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Series Suggestions</h3>
-                          <div className="flex flex-wrap gap-2">
-                            {matchingSeries.map((series) => (
-                              <Link
-                                key={series.slug}
-                                href={`/series/${series.slug}`}
-                                onClick={() => setIsSearchOpen(false)}
-                                className="px-5 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-700 hover:text-white rounded-xl text-sm font-bold transition-all border border-blue-100 flex items-center gap-2 group"
-                              >
-                                {series.name}
-                                <ArrowRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                              </Link>
-                            ))}
+                    {isLoadingSuggestions ? (
+                      <div className="flex items-center justify-center py-12">
+                        <Loader size="sm" />
+                      </div>
+                      ) : (suggestions.length > 0 || matchingSeries.length > 0 || matchingCategories.length > 0) ? (
+                      <div className="space-y-8">
+                        {(matchingSeries.length > 0 || matchingCategories.length > 0) && (
+                          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Quick Suggestions</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {matchingSeries.map((series) => (
+                                <Link
+                                  key={series.slug}
+                                  href={`/series/${series.slug}`}
+                                  onClick={() => setIsSearchOpen(false)}
+                                  className="px-5 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-700 hover:text-white rounded-xl text-sm font-bold transition-all border border-blue-100 flex items-center gap-2 group"
+                                >
+                                  {series.name}
+                                  <ArrowRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                                </Link>
+                              ))}
+                              {matchingCategories.map((category) => (
+                                <Link
+                                  key={category}
+                                  href={`/catalog?category=${encodeURIComponent(category)}`}
+                                  onClick={() => setIsSearchOpen(false)}
+                                  className="px-5 py-2.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-700 hover:text-white rounded-xl text-sm font-bold transition-all border border-emerald-100 flex items-center gap-2 group"
+                                >
+                                  {category}
+                                  <ArrowRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+
 
                       {suggestions.length > 0 && (
                         <div className="animate-in fade-in slide-in-from-top-2 duration-500 delay-150">
