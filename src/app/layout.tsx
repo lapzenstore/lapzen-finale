@@ -1,5 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
+import MetaPixel from "@/components/meta-pixel";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
@@ -81,6 +82,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <PageLoader />
           </Suspense>
+          <MetaPixel />
           <ErrorReporter />
         <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
         <Script
@@ -130,5 +132,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
