@@ -109,12 +109,12 @@ export function ProductDetails({ product }: { product: Product }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
       {/* Image Gallery */}
       <div className="space-y-4">
-        <div 
-          className={`relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8 group/image ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
-          onMouseMove={handleMouseMove}
-          onClick={() => setIsZoomed(!isZoomed)}
-          onMouseLeave={() => setIsZoomed(false)}
-        >
+          <div 
+            className={`relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8 group/image cursor-zoom-in`}
+            onMouseEnter={() => setIsZoomed(true)}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setIsZoomed(false)}
+          >
           <div 
             className="relative w-full h-full transition-transform duration-200 ease-out pointer-events-none"
             style={{
