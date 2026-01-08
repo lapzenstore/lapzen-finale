@@ -31,6 +31,20 @@ export function ProductDetails({ product }: { product: Product }) {
   const { addItem, setIsOpen } = useCart();
   const router = useRouter();
 
+  React.useEffect(() => {
+    if (product) {
+      import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+        trackMetaEvent('ViewContent', {
+          content_ids: [product.id],
+          content_name: product.title,
+          content_type: 'product',
+          value: product.price,
+          currency: 'PKR',
+        });
+      });
+    }
+  }, [product.id, product.title, product.price]);
+
   const images = product.image_urls && product.image_urls.length > 0 
     ? product.image_urls 
     : [product.image_url || "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop"];
@@ -42,6 +56,17 @@ export function ProductDetails({ product }: { product: Product }) {
       price: product.price,
       image: images[0],
     });
+
+    import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+      trackMetaEvent('AddToCart', {
+        content_ids: [product.id],
+        content_name: product.title,
+        content_type: 'product',
+        value: product.price * quantity,
+        currency: 'PKR',
+      });
+    });
+
     // If quantity > 1, we might need to update the cart context to support initial quantity
     // But for now, let's just add it multiple times or update the quantity manually if the context supports it.
     // Looking at cart-context.tsx, addItem only adds 1. Let's fix that or just call it multiple times for now.
