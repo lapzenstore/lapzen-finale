@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { SERIES_MAPPING } from '@/lib/constants';
 
 export const dynamic = "force-dynamic";
 
@@ -36,10 +37,34 @@ export async function GET(request: Request) {
     
     if (search) {
       console.log('Searching for:', search);
-      // Optimize search: Search title, brand, and series. 
-      // Avoid searching large description with ilike for better performance.
-      const searchTerm = `%${search}%`;
-      query = query.or(`title.ilike.${searchTerm},brand.ilike.${searchTerm},series.ilike.${searchTerm}`);
+      const searchTerm = `%${search.trim()}%`;
+      
+      // Build an OR query that is more robust
+      let orConditions = [
+        `title.ilike.${searchTerm}`,
+        `brand.ilike.${searchTerm}`,
+        `series.ilike.${searchTerm}`
+      ];
+
+      // Check if search term matches any known series name from our mapping
+      // This handles cases like searching "ThinkPad" matching "Lenovo ThinkPad" 
+      // OR searching "Lenovo ThinkPad" matching "ThinkPad" (legacy data)
+      const normalizedSearch = search.toLowerCase();
+      Object.values(SERIES_MAPPING).forEach(seriesName => {
+        const normalizedSeriesName = seriesName.toLowerCase();
+        if (normalizedSeriesName.includes(normalizedSearch) || normalizedSearch.includes(normalizedSeriesName)) {
+          // If match found, also search for the exact series name and parts of it
+          orConditions.push(`series.ilike.%${seriesName}%`);
+          
+          // Also handle cases where the DB might only have the last part (e.g. "ThinkPad" instead of "Lenovo ThinkPad")
+          const parts = seriesName.split(' ');
+          if (parts.length > 1) {
+            orConditions.push(`series.ilike.%${parts[parts.length - 1]}%`);
+          }
+        }
+      });
+
+      query = query.or(Array.from(new Set(orConditions)).join(','));
     }
 
     console.log('Executing Supabase query...');
