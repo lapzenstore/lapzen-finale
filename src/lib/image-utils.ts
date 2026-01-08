@@ -71,13 +71,6 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
         logo.crossOrigin = "anonymous";
         applyLogo(logoUrl + (logoUrl.includes('?') ? '&' : '?') + 't=' + Date.now());
       });
-
-      logo.onerror = () => {
-        // If logo fails to load, resolve with original file but log error
-        console.error('Failed to load watermark logo');
-        resolve(file);
-      };
     };
-    img.onerror = () => reject(new Error('Failed to load image'));
   });
 }
