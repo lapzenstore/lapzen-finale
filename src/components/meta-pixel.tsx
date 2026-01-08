@@ -10,11 +10,14 @@ function MetaPixelInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    if (!PIXEL_ID || !window.fbq) return;
+   useEffect(() => {
+      if (!PIXEL_ID) return;
 
-    window.fbq('track', 'PageView');
-  }, [pathname, searchParams]);
+          // trackMetaEvent handles both browser and CAPI
+      import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+        trackMetaEvent('PageView');
+      });
+    }, [pathname, searchParams]);
 
   if (!PIXEL_ID) return null;
 
