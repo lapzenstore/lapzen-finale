@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Upload, X, Loader2, Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { applyWatermark } from "@/lib/image-utils";
+import { CATEGORIES } from "@/lib/constants";
 
 function LaptopForm({ 
   formData, 
@@ -15,7 +16,6 @@ function LaptopForm({
   handleImageUpload, 
   removeImage
 }: any) {
-  const categories = ["Gaming", "ChromeBooks", "Workstations", "Business", "2 in 1", "Ultra Light"];
   const brands = ["Dell", "Lenovo", "HP", "Toshiba", "Asus", "Apple"];
   const series = [
     "HP Omen", "HP Zbook", "HP Elitebook", 
@@ -70,30 +70,30 @@ function LaptopForm({
             className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all resize-none"
           ></textarea>
 
-          <div className="grid grid-cols-2 gap-4">
-            <select 
-              required
-              value={formData.category}
-              onChange={(e) => setFormData({...formData, category: e.target.value})}
-              className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all appearance-none"
-            >
-              <option value="">Select Category</option>
-              {categories.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-            <select 
-              required
-              value={formData.series} 
-              onChange={(e) => setFormData({...formData, series: e.target.value})}
-              className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all appearance-none"
-            >
-              <option value="">Select Series</option>
-              {series.map((s: string) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <select 
+                required
+                value={formData.category}
+                onChange={(e) => setFormData({...formData, category: e.target.value})}
+                className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all appearance-none"
+              >
+                <option value="">Select Category</option>
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <select 
+                required
+                value={formData.series} 
+                onChange={(e) => setFormData({...formData, series: e.target.value})}
+                className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all appearance-none"
+              >
+                <option value="">Select Series</option>
+                {series.map((s: string) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
 
           <div className="flex gap-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
             <label className="flex items-center gap-3 cursor-pointer group">
