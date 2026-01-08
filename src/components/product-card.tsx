@@ -42,6 +42,12 @@ export function ProductCard({ product }: ProductCardProps) {
       ? product.images[0] 
       : product.image_url || "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop";
   
+  const secondImage = (product.image_urls && product.image_urls.length > 1)
+    ? product.image_urls[1]
+    : (product.images && product.images.length > 1) 
+      ? product.images[1] 
+      : null;
+  
   const displaySpecs = [
     product.ram_size || product.specs?.ram,
     product.storage_size || product.specs?.storage
@@ -118,17 +124,26 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group bg-white border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-navy/20">
       <JsonLd data={productSchema} />
-      <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
-        <Link href={`/products/${slug}`}>
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="object-contain transition-transform duration-500 group-hover:scale-105 p-4"
-            unoptimized={image.startsWith('http')}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        </Link>
+        <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
+          <Link href={`/products/${slug}`}>
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className={`object-contain transition-all duration-500 p-4 ${secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
+              unoptimized={image.startsWith('http')}
+            />
+            {secondImage && (
+              <Image
+                src={secondImage}
+                alt={`${title} - Alternate View`}
+                fill
+                className="object-contain transition-all duration-500 p-4 opacity-0 group-hover:opacity-100 group-hover:scale-105"
+                unoptimized={secondImage.startsWith('http')}
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
         
         <div className="absolute top-4 right-4 flex flex-col gap-2">
           <Button
