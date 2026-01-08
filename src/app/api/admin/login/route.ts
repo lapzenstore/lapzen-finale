@@ -1,27 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    
+    // Fetch password from database
+    const { data: settings, error: fetchError } = await supabaseAdmin
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'admin_password')
+      .single();
 
-    if (password?.trim() === ADMIN_PASSWORD) {
-      const cookieStore = await cookies();
+    if (fetchError || !settings) {
+      console.error("Error fetching admin password:", fetchError);
+      // Fallback to env if DB fails (optional, but safer for first run)
+      const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+      const expected = ADMIN_PASSWORD?.trim();
+      const provided = password?.trim();
       
-        // Use standard cookie settings that work well in local dev and production
-        cookieStore.set("lapzen_admin_access", "true", {
-          path: "/",
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          maxAge: 60 * 60 * 24, // 24 hours
-        });
+      if (provided === expected) {
+        return await handleSuccess();
+      }
+      
+      return NextResponse.json(
+        { success: false, error: "Authentication configuration error" },
+        { status: 500 }
+      );
+    }
 
-      console.log("Admin login successful, cookie set.");
-      return NextResponse.json({ success: true });
+    const expected = settings.value.trim();
+    const provided = password?.trim();
+
+    if (provided === expected) {
+      return await handleSuccess();
     }
 
     console.log("Admin login failed: Invalid password");
@@ -38,3 +53,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
+async function handleSuccess() {
+  const cookieStore = await cookies();
+  cookieStore.set("lapzen_admin_access", "true", {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24, // 24 hours
+  });
+
+  console.log("Admin login successful, cookie set.");
+  return NextResponse.json({ success: true });
+}
