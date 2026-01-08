@@ -97,7 +97,7 @@ function LaptopForm({
 
           <div className="flex gap-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
             <label className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.new_arrival ? 'bg-navy border-navy' : 'border-slate-300 bg-white group-hover:border-navy/50'}`}>
+              <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.new_arrival ? 'bg-[#00172E] border-[#00172E]' : 'border-slate-300 bg-white group-hover:border-[#00172E]/50'}`}>
                 {formData.new_arrival && <div className="w-2 h-2 rounded-full bg-white" />}
               </div>
               <input 
@@ -106,10 +106,10 @@ function LaptopForm({
                 checked={formData.new_arrival} 
                 onChange={(e) => setFormData({...formData, new_arrival: e.target.checked})}
               />
-              <span className="text-sm font-bold text-navy">New Arrival</span>
+              <span className="text-sm font-bold text-[#00172E]">New Arrival</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.featured ? 'bg-navy border-navy' : 'border-slate-300 bg-white group-hover:border-navy/50'}`}>
+              <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${formData.featured ? 'bg-[#00172E] border-[#00172E]' : 'border-slate-300 bg-white group-hover:border-[#00172E]/50'}`}>
                 {formData.featured && <div className="w-2 h-2 rounded-full bg-white" />}
               </div>
               <input 
@@ -118,7 +118,7 @@ function LaptopForm({
                 checked={formData.featured} 
                 onChange={(e) => setFormData({...formData, featured: e.target.checked})}
               />
-              <span className="text-sm font-bold text-navy">Featured</span>
+              <span className="text-sm font-bold text-[#00172E]">Featured</span>
             </label>
           </div>
         </div>
