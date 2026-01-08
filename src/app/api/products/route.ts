@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { SERIES_MAPPING } from '@/lib/constants';
+import { SERIES_MAPPING, CATEGORIES } from '@/lib/constants';
 
 export const dynamic = "force-dynamic";
 
@@ -43,24 +43,29 @@ export async function GET(request: Request) {
       let orConditions = [
         `title.ilike.${searchTerm}`,
         `brand.ilike.${searchTerm}`,
-        `series.ilike.${searchTerm}`
+        `series.ilike.${searchTerm}`,
+        `category.ilike.${searchTerm}`
       ];
 
-      // Check if search term matches any known series name from our mapping
-      // This handles cases like searching "ThinkPad" matching "Lenovo ThinkPad" 
-      // OR searching "Lenovo ThinkPad" matching "ThinkPad" (legacy data)
       const normalizedSearch = search.toLowerCase();
+
+      // Check for series matches
       Object.values(SERIES_MAPPING).forEach(seriesName => {
         const normalizedSeriesName = seriesName.toLowerCase();
         if (normalizedSeriesName.includes(normalizedSearch) || normalizedSearch.includes(normalizedSeriesName)) {
-          // If match found, also search for the exact series name and parts of it
           orConditions.push(`series.ilike.%${seriesName}%`);
-          
-          // Also handle cases where the DB might only have the last part (e.g. "ThinkPad" instead of "Lenovo ThinkPad")
           const parts = seriesName.split(' ');
           if (parts.length > 1) {
             orConditions.push(`series.ilike.%${parts[parts.length - 1]}%`);
           }
+        }
+      });
+
+      // Check for category matches
+      CATEGORIES.forEach(catName => {
+        const normalizedCatName = catName.toLowerCase();
+        if (normalizedCatName.includes(normalizedSearch) || normalizedSearch.includes(normalizedCatName)) {
+          orConditions.push(`category.ilike.%${catName}%`);
         }
       });
 
