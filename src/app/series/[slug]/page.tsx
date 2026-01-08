@@ -23,7 +23,7 @@ export default async function SeriesPage(props: {
     "@type": "CollectionPage",
     "name": `${seriesName} Laptops Collection`,
     "description": `Browse our premium collection of ${seriesName} laptops at Lapzen.`,
-    "url": `https://lapzen.store/series/${slug}`
+    "url": `https://lapzen.shop/series/${slug}`
   };
 
   return (
@@ -50,3 +50,4 @@ export default async function SeriesPage(props: {
     </div>
   );
 }
+
