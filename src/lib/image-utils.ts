@@ -21,14 +21,14 @@ export async function applyWatermark(file: File, logoUrl: string = '/logo.png'):
       const logo = new Image();
       logo.src = logoUrl;
       logo.onload = () => {
-        // Calculate logo size (e.g., 20% of image width)
-        const logoWidth = canvas.width * 0.25;
+        // Calculate logo size (e.g., 15% of image width)
+        const logoWidth = canvas.width * 0.15;
         const logoHeight = (logo.height / logo.width) * logoWidth;
 
-        // Position: Bottom Right with some padding
+        // Position: Top Left with some padding
         const padding = canvas.width * 0.02;
-        const x = canvas.width - logoWidth - padding;
-        const y = canvas.height - logoHeight - padding;
+        const x = padding;
+        const y = padding;
 
         // Apply some transparency for the watermark
         ctx.globalAlpha = 0.6;
