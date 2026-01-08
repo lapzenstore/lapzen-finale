@@ -5,7 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
 import { Input } from "@/components/ui/input";
-import { Search as SearchIcon, ShoppingBag, Loader2, Frown } from "lucide-react";
+import { Search as SearchIcon, ShoppingBag, Frown } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { ProductCard } from "@/components/product-card";
 
 function SearchContent() {
@@ -38,6 +39,12 @@ function SearchContent() {
     if (initialQuery) {
       fetchResults(initialQuery);
       setSearchQuery(initialQuery);
+      
+      import('@/lib/meta-client').then(({ trackMetaEvent }) => {
+        trackMetaEvent('Search', {
+          search_string: initialQuery,
+        });
+      });
     }
   }, [initialQuery]);
 
@@ -79,12 +86,12 @@ function SearchContent() {
           </span>
         </div>
 
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="w-12 h-12 animate-spin text-navy/20" />
-            <p className="text-navy/40 font-bold">Finding the best laptops for you...</p>
-          </div>
-        ) : results.length > 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <Loader size="md" className="mb-4" />
+              <p className="text-navy/40 font-bold">Finding the best laptops for you...</p>
+            </div>
+          ) : results.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {results.map((product) => (
                 <ProductCard key={product.id} product={product} />
@@ -114,7 +121,7 @@ export default function SearchPage() {
       <Header />
       <Suspense fallback={
         <div className="flex-grow flex items-center justify-center">
-          <Loader2 className="w-12 h-12 animate-spin text-navy" />
+          <Loader size="md" />
         </div>
       }>
         <SearchContent />
