@@ -15,3 +15,12 @@ export const SERIES_MAPPING: { [key: string]: string } = {
 
 export const SERIES_NAMES = Object.values(SERIES_MAPPING);
 export const SERIES_SLUGS = Object.keys(SERIES_MAPPING);
+
+export const CATEGORIES = [
+  "Gaming",
+  "ChromeBooks",
+  "Workstations",
+  "Business",
+  "2 in 1",
+  "Ultra Light"
+];
