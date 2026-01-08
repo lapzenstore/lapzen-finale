@@ -28,8 +28,17 @@ export function ProductDetails({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isZoomed, setIsZoomed] = useState(false);
   const { addItem, setIsOpen } = useCart();
   const router = useRouter();
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setMousePos({ x, y });
+  };
 
   React.useEffect(() => {
     if (product) {
@@ -101,20 +110,38 @@ export function ProductDetails({ product }: { product: Product }) {
       {/* Image Gallery */}
       <div className="space-y-4">
         <div 
-          className="relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8 cursor-zoom-in group/image"
-          onClick={() => setIsLightboxOpen(true)}
+          className={`relative aspect-square rounded-3xl overflow-hidden bg-white border border-border p-8 group/image ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
+          onMouseMove={handleMouseMove}
+          onClick={() => setIsZoomed(!isZoomed)}
+          onMouseLeave={() => setIsZoomed(false)}
         >
-          <Image
-            src={images[selectedImage]}
-            alt={product.title}
-            fill
-            className="object-contain transition-transform duration-500 group-hover/image:scale-105"
-            priority
-            unoptimized={images[selectedImage].startsWith('http')}
-          />
-          <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover/image:opacity-100 transition-opacity shadow-sm border border-border">
-            <Maximize2 className="w-5 h-5 text-navy" />
+          <div 
+            className="relative w-full h-full transition-transform duration-200 ease-out pointer-events-none"
+            style={{
+              transform: isZoomed ? 'scale(2.5)' : 'scale(1)',
+              transformOrigin: `${mousePos.x}% ${mousePos.y}%`
+            }}
+          >
+            <Image
+              src={images[selectedImage]}
+              alt={product.title}
+              fill
+              className="object-contain"
+              priority
+              unoptimized={images[selectedImage].startsWith('http')}
+            />
           </div>
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsLightboxOpen(true);
+            }}
+            className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md p-3 rounded-2xl opacity-0 group-hover/image:opacity-100 transition-all shadow-xl border border-border hover:bg-navy hover:text-white group/btn z-10"
+          >
+            <Maximize2 className="w-5 h-5 transition-transform group-hover/btn:scale-110" />
+          </button>
         </div>
         {images.length > 1 && (
           <div className="grid grid-cols-5 gap-4">
