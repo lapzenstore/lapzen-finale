@@ -121,100 +121,99 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
-  return (
-    <div className="group bg-white border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-navy/20">
-      <JsonLd data={productSchema} />
-        <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
-          <Link href={`/products/${slug}`}>
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className={`object-contain transition-all duration-500 p-4 ${secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
-              unoptimized={image.startsWith('http')}
-            />
-            {secondImage && (
+    return (
+      <Link 
+        href={`/products/${slug}`}
+        className="group block bg-white border border-border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-navy/20"
+      >
+        <JsonLd data={productSchema} />
+          <div className="relative aspect-[4/3] bg-white overflow-hidden p-4">
               <Image
-                src={secondImage}
-                alt={`${title} - Alternate View`}
+                src={image}
+                alt={title}
                 fill
-                className="object-contain transition-all duration-500 p-4 opacity-0 group-hover:opacity-100 group-hover:scale-105"
-                unoptimized={secondImage.startsWith('http')}
+                className={`object-contain transition-all duration-500 p-4 ${secondImage ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
+                unoptimized={image.startsWith('http')}
               />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          </Link>
-        
-        <div className="absolute top-4 right-4 flex flex-col gap-2">
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsLightboxOpen(true);
-            }}
-            size="icon"
-            variant="secondary"
-            className="w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md translate-y-[-10px] group-hover:translate-y-0"
-          >
-            <Maximize2 className="w-4 h-4" />
-          </Button>
-        </div>
+              {secondImage && (
+                <Image
+                  src={secondImage}
+                  alt={`${title} - Alternate View`}
+                  fill
+                  className="object-contain transition-all duration-500 p-4 opacity-0 group-hover:opacity-100 group-hover:scale-105"
+                  unoptimized={secondImage.startsWith('http')}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          
+          <div className="absolute top-4 right-4 flex flex-col gap-2">
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsLightboxOpen(true);
+              }}
+              size="icon"
+              variant="secondary"
+              className="w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md translate-y-[-10px] group-hover:translate-y-0"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </Button>
+          </div>
 
-        <Button
-          onClick={handleAddToCart}
-          size="sm"
-          className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg"
-        >
-          <Plus className="w-4 h-4 mr-1" />
-          Add to Cart
-        </Button>
-      </div>
-      <div className="p-5">
-        <div className="flex items-center gap-2 mb-1">
-          {product.category && (
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-slate-100 px-2 py-0.5 rounded">
-              {product.category}
-            </span>
-          )}
-          {product.brand && (
-            <span className="text-[10px] font-bold text-red-600 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded">
-              {product.brand}
-            </span>
-          )}
-        </div>
-          <Link href={`/products/${slug}`}>
-            <h3 className="text-base font-semibold text-navy mt-1 line-clamp-2 hover:text-accent transition-colors">
-              {title}
-            </h3>
-          </Link>
-
-        {displaySpecs && (
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
-            {displaySpecs}
-          </p>
-        )}
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-lg font-bold text-navy">
-            Rs. {product.price.toLocaleString()}
-          </span>
           <Button
             onClick={handleAddToCart}
             size="sm"
-            variant="outline"
-            className="lg:hidden"
+            className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 mr-1" />
+            Add to Cart
           </Button>
         </div>
-      </div>
+        <div className="p-5">
+          <div className="flex items-center gap-2 mb-1">
+            {product.category && (
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-slate-100 px-2 py-0.5 rounded">
+                {product.category}
+              </span>
+            )}
+            {product.brand && (
+              <span className="text-[10px] font-bold text-red-600 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded">
+                {product.brand}
+              </span>
+            )}
+          </div>
+          <h3 className="text-base font-semibold text-navy mt-1 line-clamp-2 group-hover:text-accent transition-colors">
+            {title}
+          </h3>
 
-      <ImageLightbox 
-        isOpen={isLightboxOpen}
-        onClose={() => setIsLightboxOpen(false)}
-        imageSrc={image}
-        altText={title}
-      />
-    </div>
-  );
+          {displaySpecs && (
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+              {displaySpecs}
+            </p>
+          )}
+          <div className="flex items-center justify-between mt-4">
+            <span className="text-lg font-bold text-navy">
+              Rs. {product.price.toLocaleString()}
+            </span>
+            <Button
+              onClick={handleAddToCart}
+              size="sm"
+              variant="outline"
+              className="lg:hidden"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        <ImageLightbox 
+          isOpen={isLightboxOpen}
+          onClose={() => setIsLightboxOpen(false)}
+          imageSrc={image}
+          altText={title}
+        />
+      </Link>
+    );
 }
 
