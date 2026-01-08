@@ -1,5 +1,4 @@
-export async function applyWatermark(file: File, logoUrl: string = '/logo.png'): Promise<File> {
-  return new Promise((resolve, reject) => {
+export async function applyWatermark(file: File, logoUrl: string = 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/37a0c0cf-0b35-45c9-84ca-b967aca3e2b6/logo-removebg-preview-1767874772753.png?width=8000&height=8000&resize=contain'): Promise<File> {  return new Promise((resolve, reject) => {
     const img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = () => {
