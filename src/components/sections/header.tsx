@@ -32,6 +32,21 @@ const AnnouncementBar = () => {
 
 };
 
+const seriesMapping: { [key: string]: string } = {
+  "hp-omen": "HP Omen",
+  "hp-zbook": "HP Zbook",
+  "hp-elitebook": "HP Elitebook",
+  "dell-precision": "Dell Precision",
+  "dell-latitude": "Dell Latitude",
+  "dell-xps": "Dell XPS",
+  "lenovo-legion": "Lenovo Legion",
+  "lenovo-thinkpad": "Lenovo ThinkPad",
+  "lenovo-thinkbook": "Lenovo Thinkbook",
+  "apple-macbook": "Apple Macbook",
+  "toshiba": "Toshiba",
+  "asus": "Asus"
+};
+
 const Header = () => {
   const { itemCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,6 +58,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [matchingSeries, setMatchingSeries] = useState<{slug: string, name: string}[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const router = useRouter();
 
@@ -54,8 +70,19 @@ const Header = () => {
     const fetchSuggestions = async () => {
       if (searchQuery.trim().length < 2) {
         setSuggestions([]);
+        setMatchingSeries([]);
         return;
       }
+
+      // Filter series locally from mapping
+      const filteredSeries = Object.entries(seriesMapping)
+        .filter(([slug, name]) => 
+          name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .map(([slug, name]) => ({ slug, name }))
+        .slice(0, 3);
+      setMatchingSeries(filteredSeries);
+
       setIsLoadingSuggestions(true);
       try {
         const response = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}`);
@@ -175,7 +202,7 @@ const Header = () => {
             <div className="flex items-center gap-4 lg:gap-6">
               <div className="hidden lg:flex items-center gap-3 border-r border-black/10 pr-6 mr-2">
                   <a
-                    href="https://web.facebook.com/lapzen.store"
+                    href="https://web.facebook.com/lap.lapzen"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
@@ -183,7 +210,7 @@ const Header = () => {
                     <Facebook size={16} fill="currentColor" strokeWidth={0} />
                   </a>
                   <a
-                    href="https://www.instagram.com/lapzen.store"
+                    href="https://www.instagram.com/lapzenstore"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
@@ -262,52 +289,74 @@ const Header = () => {
                     <div className="flex items-center justify-center py-12">
                       <Loader size="sm" />
                     </div>
-                  ) : suggestions.length > 0 ? (
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Suggestions</h3>
+                    ) : (suggestions.length > 0 || matchingSeries.length > 0) ? (
+                    <div className="space-y-8">
+                      {matchingSeries.length > 0 && (
+                        <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                          <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Series Suggestions</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {matchingSeries.map((series) => (
+                              <Link
+                                key={series.slug}
+                                href={`/series/${series.slug}`}
+                                onClick={() => setIsSearchOpen(false)}
+                                className="px-5 py-2.5 bg-blue-50 text-blue-700 hover:bg-blue-700 hover:text-white rounded-xl text-sm font-bold transition-all border border-blue-100 flex items-center gap-2 group"
+                              >
+                                {series.name}
+                                <ArrowRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {suggestions.length > 0 && (
+                        <div className="animate-in fade-in slide-in-from-top-2 duration-500 delay-150">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Product Suggestions</h3>
+                          </div>
+                          <div className="grid gap-4">
+                            {suggestions.map((product) => (
+                              <Link
+                                key={product.id}
+                                href={`/products/${product.slug}`}
+                                onClick={() => setIsSearchOpen(false)}
+                                className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-200 hover:bg-slate-50/50 transition-all duration-300 group active:scale-[0.98]"
+                              >
+                                <div className="relative w-16 h-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+                                  <Image
+                                    src={product.image_urls?.[0] || "/placeholder.jpg"}
+                                    alt={product.title}
+                                    fill
+                                    className="object-contain p-2"
+                                  />
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="font-bold text-navy group-hover:text-blue-700 transition-colors">{product.title}</h4>
+                                  <p className="text-sm text-slate-500 line-clamp-1">{product.series}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-bold text-navy">Rs. {product.price?.toLocaleString()}</p>
+                                  <span className="text-[10px] text-blue-600 font-bold uppercase tracking-tighter flex items-center gap-1 justify-end">
+                                    View Product <ArrowRight size={10} />
+                                  </span>
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {searchQuery.trim().length >= 2 && (
+                        <button 
+                          onClick={() => handleSearch()}
+                          className="w-full py-4 text-center text-navy font-bold hover:text-blue-700 transition-colors border-t border-slate-100 mt-4 group"
+                        >
+                          Show all results for "{searchQuery}" <ArrowRight size={16} className="inline-block ml-1 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
-                      <div className="grid gap-4">
-                        {suggestions.map((product) => {
-                          return (
-                            <Link
-                              key={product.id}
-                              href={`/products/${product.slug}`}
-                              onClick={() => setIsSearchOpen(false)}
-                              className="flex items-center gap-4 p-4 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-blue-200 hover:bg-slate-50/50 transition-all duration-300 group active:scale-[0.98]"
-                            >
-                              <div className="relative w-16 h-16 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
-                                <Image
-                                  src={product.image_urls?.[0] || "/placeholder.jpg"}
-                                  alt={product.title}
-                                  fill
-                                  className="object-contain p-2"
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="font-bold text-navy group-hover:text-blue-700 transition-colors">{product.title}</h4>
-                                <p className="text-sm text-slate-500 line-clamp-1">{product.series}</p>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-bold text-navy">Rs. {product.price?.toLocaleString()}</p>
-                                <span className="text-[10px] text-blue-600 font-bold uppercase tracking-tighter flex items-center gap-1 justify-end">
-                                  View Product <ArrowRight size={10} />
-                                </span>
-                              </div>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    {searchQuery.trim().length >= 2 && (
-                      <button 
-                        onClick={() => handleSearch()}
-                        className="w-full py-4 text-center text-navy font-bold hover:text-blue-700 transition-colors border-t border-slate-100 mt-4"
-                      >
-                        Show all results for "{searchQuery}"
-                      </button>
-                    )}
-                  </div>
-                ) : searchQuery.trim().length >= 2 ? (
+                  ) : searchQuery.trim().length >= 2 ? (
                   <div className="text-center py-12">
                     <p className="text-slate-500">No products found for "{searchQuery}"</p>
                   </div>
