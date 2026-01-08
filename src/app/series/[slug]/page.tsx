@@ -3,21 +3,7 @@ import Footer from "@/components/sections/footer";
 import { ProductsSection } from "@/components/sections/featured-products";
 import { JsonLd } from "@/components/schema";
 import { notFound } from "next/navigation";
-
-const seriesMapping: { [key: string]: string } = {
-  "hp-omen": "HP Omen",
-  "hp-zbook": "HP Zbook",
-  "hp-elitebook": "HP Elitebook",
-  "dell-precision": "Dell Precision",
-  "dell-latitude": "Dell Latitude",
-  "dell-xps": "Dell XPS",
-  "lenovo-legion": "Lenovo Legion",
-  "lenovo-thinkpad": "Lenovo ThinkPad",
-  "lenovo-thinkbook": "Lenovo Thinkbook",
-  "apple-macbook": "Apple Macbook",
-  "toshiba": "Toshiba",
-  "asus": "Asus"
-};
+import { SERIES_MAPPING } from "@/lib/constants";
 
 export default async function SeriesPage(props: { 
   params: Promise<{ slug: string }>;
@@ -26,7 +12,7 @@ export default async function SeriesPage(props: {
   const params = await props.params;
   const { slug } = params;
 
-  const seriesName = seriesMapping[slug];
+  const seriesName = SERIES_MAPPING[slug];
 
   if (!seriesName) {
     notFound();
