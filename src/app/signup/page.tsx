@@ -57,22 +57,21 @@ export default function SignUpPage() {
         return;
       }
 
-      // 2. Perform signup
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          data: {
-            full_name: name,
-          },
-        },
+      // 2. Perform signup via custom API to auto-confirm
+      const signUpRes = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
       });
+      
+      const signUpData = await signUpRes.json();
 
-      if (signUpError) throw signUpError;
+      if (!signUpRes.ok || signUpData.error) {
+        throw new Error(signUpData.error || "Failed to create account");
+      }
       
       // 3. Show success message
-      setSuccessMessage("A confirmation mail has been sent to your email address. Please verify your account.");
+      setSuccessMessage("Your account has been created successfully. You can now log in without email verification.");
       
       // Clear form
       setName("");
