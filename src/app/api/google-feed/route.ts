@@ -35,27 +35,31 @@ export async function GET() {
 
   const baseUrl = "https://lapzen.shop";
 
-  const items = products.map((product) => {
-    const slug = slugify(product.title);
-    const productUrl = `${baseUrl}/products/${slug}`;
-    const imageUrl = product.image_urls?.[0] || product.image_url || `${baseUrl}/logo.png`;
-    const availability = product.stock_status === "in_stock" ? "in stock" : "out of stock";
-    const price = `${product.price} PKR`;
+    const items = products.map((product) => {
+      const slug = slugify(product.title);
+      const productUrl = `${baseUrl}/products/${slug}`;
+      const imageUrl = product.image_urls?.[0] || product.image_url || `${baseUrl}/logo.png`;
+      const availability = product.stock_status === "in_stock" ? "in stock" : "out of stock";
+      const price = `${product.price} PKR`;
+      
+      // Generate MPN from ID if not present in specs
+      const mpn = product.specs?.model || product.specs?.mpn || product.id.split("-")[0].toUpperCase();
 
-    return `
-    <item>
-      <g:id>${escapeXml(product.id)}</g:id>
-      <g:title>${escapeXml(product.title)}</g:title>
-      <g:description>${escapeXml(product.description || `Buy ${product.title} at Lapzen.`)}</g:description>
-      <g:link>${escapeXml(product.url || productUrl)}</g:link>
-      <g:image_link>${escapeXml(imageUrl)}</g:image_link>
-      <g:condition>new</g:condition>
-      <g:availability>${escapeXml(availability)}</g:availability>
-      <g:price>${escapeXml(price)}</g:price>
-      <g:brand>${escapeXml(product.brand || "Lapzen")}</g:brand>
-      <g:google_product_category>Electronics &gt; Computers &gt; Laptops</g:google_product_category>
-    </item>`;
-  }).join("");
+      return `
+      <item>
+        <g:id>${escapeXml(product.id)}</g:id>
+        <g:title>${escapeXml(product.title)}</g:title>
+        <g:description>${escapeXml(product.description || `Buy ${product.title} at Lapzen.`)}</g:description>
+        <g:link>${escapeXml(product.url || productUrl)}</g:link>
+        <g:image_link>${escapeXml(imageUrl)}</g:image_link>
+        <g:condition>new</g:condition>
+        <g:availability>${escapeXml(availability)}</g:availability>
+        <g:price>${escapeXml(price)}</g:price>
+        <g:brand>${escapeXml(product.brand || "Lapzen")}</g:brand>
+        <g:mpn>${escapeXml(mpn)}</g:mpn>
+        <g:google_product_category>Electronics &gt; Computers &gt; Laptops</g:google_product_category>
+      </item>`;
+    }).join("");
 
   const xml = `<?xml version="1.0"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
