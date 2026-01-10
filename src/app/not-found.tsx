@@ -39,6 +39,9 @@ export default function NotFound() {
         
         <div className="mt-12 pt-8 border-t border-navy/5">
           <p className="text-sm text-muted-foreground uppercase tracking-[0.2em]">
+            LAPZEN
+          </p>
+          <p className="text-sm text-muted-foreground uppercase tracking-[0.2em]">
             Premium Tech Store
           </p>
         </div>
@@ -46,3 +49,4 @@ export default function NotFound() {
     </div>
   );
 }
+
