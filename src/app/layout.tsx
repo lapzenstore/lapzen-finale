@@ -1,10 +1,10 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
-import MetaPixel from "@/components/meta-pixel";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
+import MetaPixel from "@/components/meta-pixel";
 import Script from "next/script";
 import { CartProvider } from "@/context/cart-context";
 import { SnowfallProvider } from "@/context/snowfall-context";
@@ -32,8 +32,11 @@ export const metadata: Metadata = {
   },
     icons: {
       icon: "/favicon.ico",
-  },
-  twitter: {
+      shortcut: "/favicon.ico",
+      apple: "/favicon.ico",
+    },
+    manifest: "/manifest.json",
+    twitter: {
     card: "summary_large_image",
     title: "Lapzen - Premium Laptops",
     description: "Your destination for premium laptops. Shop top brands like Apple, Dell, HP, and Asus at competitive prices.",
@@ -84,7 +87,6 @@ export default function RootLayout({
           </Suspense>
           <MetaPixel />
           <ErrorReporter />
-        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
           strategy="afterInteractive"
@@ -132,6 +134,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
-
