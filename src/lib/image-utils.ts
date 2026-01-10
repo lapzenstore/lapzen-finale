@@ -1,9 +1,9 @@
-export async function applyWatermark(file: File, logoUrl: string = 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/37a0c0cf-0b35-45c9-84ca-b967aca3e2b6/logo-removebg-preview-1767874772753.png?width=8000&height=8000&resize=contain'): Promise<File> {  return new Promise((resolve, reject) => {
+export async function applyWatermark(file: File, logoUrl: string = 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/37a0c0cf-0b35-45c9-84ca-b967aca3e2b6/logo-removebg-preview-1767874772753.png?width=1200&height=1200&resize=contain'): Promise<File> {  return new Promise((resolve, reject) => {
     const img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) {
         reject(new Error('Failed to get canvas context'));
         return;
@@ -12,6 +12,10 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
       // Set canvas dimensions to image dimensions
       canvas.width = img.width;
       canvas.height = img.height;
+
+      // Ensure high quality drawing
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
 
       // Draw original image
       ctx.drawImage(img, 0, 0);
@@ -31,10 +35,9 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
         const x = padding;
         const y = padding;
 
-        // Apply some transparency for the watermark
-        ctx.globalAlpha = 0.6;
-        ctx.drawImage(logo, x, y, logoWidth, logoHeight);
+        // No transparency for the watermark (100% clear)
         ctx.globalAlpha = 1.0;
+        ctx.drawImage(logo, x, y, logoWidth, logoHeight);
 
         // Convert back to file
         canvas.toBlob((blob) => {
@@ -47,7 +50,7 @@ export async function applyWatermark(file: File, logoUrl: string = 'https://slel
           } else {
             reject(new Error('Failed to create blob'));
           }
-        }, file.type);
+        }, file.type, 1.0); // Use 1.0 quality for the blob
         
         URL.revokeObjectURL(img.src);
         if (imgSrc.startsWith('blob:')) {
