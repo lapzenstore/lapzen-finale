@@ -39,7 +39,7 @@ export async function GET() {
       const slug = slugify(product.title);
       const productUrl = `${baseUrl}/products/${slug}`;
       const imageUrl = product.image_urls?.[0] || product.image_url || `${baseUrl}/logo.png`;
-      const availability = product.stock_status === "in_stock" ? "in stock" : "out of stock";
+      const availability = "in stock";
       const price = `${product.price} PKR`;
       
       // Generate MPN from ID if not present in specs
