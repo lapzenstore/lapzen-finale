@@ -192,9 +192,10 @@ export function ProductDetails({ product }: { product: Product }) {
               In Stock
             </span>
           </div>
-            <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
-              {product.description}
-            </p>
+            <div 
+              className="text-lg text-muted-foreground leading-relaxed prose prose-sm max-w-none prose-slate prose-img:rounded-2xl"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
         </div>
 
         {/* Specs Grid */}
