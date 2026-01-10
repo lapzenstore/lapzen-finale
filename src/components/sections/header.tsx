@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ShoppingCart, Menu, X, Facebook, Instagram, Twitter, ArrowRight } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, Facebook, Instagram, Twitter, ArrowRight, Snowflake, Cloud } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useSnowfall } from "@/context/snowfall-context";
+import { SnowfallToggle } from "@/components/ui/snowfall-toggle";
 
 const AnnouncementBar = () => {
   return (
@@ -227,6 +229,9 @@ const Header = () => {
 
 
             <div className="flex items-center gap-4 lg:gap-5">
+              <div className="hidden sm:block">
+                <SnowfallToggle />
+              </div>
               <button 
                 onClick={() => setIsSearchOpen(true)}
                 className="text-slate-900 hover:text-blue-700 transition-colors" 
@@ -371,21 +376,26 @@ const Header = () => {
                   </div>
                 ) : (
                   <div className="space-y-8">
-                    <div>
-                      <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Popular Categories</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {["Gaming Laptops", "Business Laptops", "Ultrabooks", "Workstations"].map((cat) => (
-                          <Link
-                            key={cat}
-                            href={`/catalog?category=${encodeURIComponent(cat)}`}
-                            onClick={() => setIsSearchOpen(false)}
-                            className="px-4 py-2 bg-slate-100 hover:bg-navy hover:text-white rounded-full text-sm font-bold transition-all"
-                          >
-                            {cat}
-                          </Link>
-                        ))}
+                      <div>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Popular Categories</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { label: "Gaming", value: "Gaming" },
+                            { label: "Business", value: "Business" },
+                            { label: "Chromebooks", value: "ChromeBooks" },
+                            { label: "Workstations", value: "Workstations" }
+                          ].map((cat) => (
+                            <Link
+                              key={cat.value}
+                              href={`/catalog?category=${encodeURIComponent(cat.value)}`}
+                              onClick={() => setIsSearchOpen(false)}
+                              className="px-4 py-2 bg-slate-100 hover:bg-navy hover:text-white rounded-full text-sm font-bold transition-all"
+                            >
+                              {cat.label}
+                            </Link>
+                          ))}
+                        </div>
                       </div>
-                    </div>
                     <div>
                       <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Popular Brands</h3>
                       <div className="flex flex-wrap gap-2">
@@ -476,32 +486,37 @@ const Header = () => {
                       </Link>
                     </nav>
 
-                    <div className="mt-auto p-8 flex items-center gap-6 border-t border-slate-100">
-                      <a
-                        href="https://web.facebook.com/lap.lapzen"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
-
-                        <Facebook size={20} fill="currentColor" strokeWidth={0} />
-                      </a>
-                      <a
-                        href="https://www.instagram.com/lapzenstore"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
-
-                        <Instagram size={20} />
-                      </a>
-                      <a
-                        href="https://x.com/lapzenstore"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
-
-                        <Twitter size={20} fill="currentColor" strokeWidth={0} />
-                      </a>
-                    </div>
+                      <div className="mt-auto p-8 flex flex-col gap-6 border-t border-slate-100">
+                        <div className="w-full">
+                          <SnowfallToggle />
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <a
+                            href="https://web.facebook.com/lap.lapzen"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
+    
+                            <Facebook size={20} fill="currentColor" strokeWidth={0} />
+                          </a>
+                          <a
+                            href="https://www.instagram.com/lapzenstore"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
+    
+                            <Instagram size={20} />
+                          </a>
+                          <a
+                            href="https://x.com/lapzenstore"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 text-[#00172E] hover:bg-gradient-to-tr hover:from-[#002b5c] hover:to-[#ff0000] hover:text-white hover:shadow-[0_0_15px_rgba(0,43,92,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:scale-110">
+    
+                            <Twitter size={20} fill="currentColor" strokeWidth={0} />
+                          </a>
+                        </div>
+                      </div>
 
 
               </div>
