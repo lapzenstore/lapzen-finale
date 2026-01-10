@@ -190,13 +190,13 @@ function LaptopForm({
           </div>
 
           <div className="pt-4">
-            <button 
-              disabled={loading || uploading}
-              type="submit"
-              className="w-full bg-navy text-#00172E px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-navy/90 transition-all disabled:opacity-50 shadow-xl shadow-navy/20"
-            >
-              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : editingId ? "Update Laptop Details" : "Publish Laptop to Store"}
-            </button>
+              <button 
+                disabled={loading || uploading}
+                type="submit"
+                className="w-full bg-navy text-white px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-navy/90 transition-all disabled:opacity-50 shadow-xl shadow-navy/20"
+              >
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : editingId ? "Update Laptop Details" : "Publish Laptop to Store"}
+              </button>
           </div>
         </div>
       </div>
@@ -359,13 +359,13 @@ export default function InventoryPage() {
           <h1 className="text-3xl font-bold text-navy">Inventory Management</h1>
           <p className="text-slate-500 text-sm mt-1">Manage your laptop collection and stock</p>
         </div>
-        <button 
-          onClick={() => {
-            if (isAdding) setEditingId(null);
-            setIsAdding(!isAdding);
-          }}
-          className="bg-navy text-#00172E px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-navy/90 transition-all shadow-lg shadow-navy/20"
-        >
+          <button 
+            onClick={() => {
+              if (isAdding) setEditingId(null);
+              setIsAdding(!isAdding);
+            }}
+            className="bg-navy text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-navy/90 transition-all shadow-lg shadow-navy/20"
+          >
           {isAdding ? <X className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
           {isAdding ? "Cancel" : "Add Laptop"}
         </button>
