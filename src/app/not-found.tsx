@@ -8,13 +8,18 @@ export default function NotFound() {
       {/* Grid overlay */}
       <div className="grid-overlay absolute inset-0 opacity-10 pointer-events-none" />
       
-      <div className="relative z-10 max-w-md w-full">
-        <h1 className="text-[120px] font-black text-navy/5 leading-none select-none">404</h1>
-        <div className="mt-[-60px]">
-          <h2 className="text-3xl font-bold text-navy mb-4">Page Not Found</h2>
-          <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
-            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-          </p>
+        <div className="relative z-10 max-w-md w-full">
+          <div className="relative">
+            <h1 className="text-[120px] sm:text-[180px] font-black text-navy/5 leading-none select-none">404</h1>
+            <div className="absolute inset-0 flex items-center justify-center pt-8 sm:pt-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-navy">Page Not Found</h2>
+            </div>
+          </div>
+          
+          <div className="mt-8 sm:mt-12">
+            <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
+              The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+            </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/">
