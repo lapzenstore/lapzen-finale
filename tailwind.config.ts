@@ -8,11 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: {
-          DEFAULT: "#002b5c",
+        colors: {
+          background: "var(--background)",
+          foreground: "var(--foreground)",
+          navy: "#002b5c",
+          primary: {
+            DEFAULT: "#002b5c",
           foreground: "#ffffff",
         },
         secondary: {
