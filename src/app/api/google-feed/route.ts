@@ -35,31 +35,39 @@ export async function GET() {
 
   const baseUrl = "https://lapzen.shop";
 
-    const items = products.map((product) => {
-      const slug = slugify(product.title);
-      const productUrl = `${baseUrl}/products/${slug}`;
-      const imageUrl = product.image_urls?.[0] || product.image_url || `${baseUrl}/logo.png`;
-      const availability = "in stock";
-      const price = `${product.price} PKR`;
-      
-      // Generate MPN from ID if not present in specs
-      const mpn = product.specs?.model || product.specs?.mpn || product.id.split("-")[0].toUpperCase();
+      const items = products.map((product) => {
+        const slug = slugify(product.title);
+        const productUrl = `${baseUrl}/products/${slug}`;
+        
+        // Handle images
+        const imageUrls = product.image_urls || (product.image_url ? [product.image_url] : []);
+        const mainImage = imageUrls[0] || `${baseUrl}/logo.png`;
+        const additionalImages = imageUrls.slice(1)
+          .map((url: string) => `<g:additional_image_link>${escapeXml(url)}</g:additional_image_link>`)
+          .join("\n        ");
 
-      return `
-      <item>
-        <g:id>${escapeXml(product.id)}</g:id>
-        <g:title>${escapeXml(product.title)}</g:title>
-        <g:description>${escapeXml(product.description || `Buy ${product.title} at Lapzen.`)}</g:description>
-        <g:link>${escapeXml(product.url || productUrl)}</g:link>
-        <g:image_link>${escapeXml(imageUrl)}</g:image_link>
-        <g:condition>new</g:condition>
-        <g:availability>${escapeXml(availability)}</g:availability>
-        <g:price>${escapeXml(price)}</g:price>
-        <g:brand>${escapeXml(product.brand || "Lapzen")}</g:brand>
-        <g:mpn>${escapeXml(mpn)}</g:mpn>
-        <g:google_product_category>Electronics &gt; Computers &gt; Laptops</g:google_product_category>
-      </item>`;
-    }).join("");
+        const availability = "in stock";
+        const price = `${product.price} PKR`;
+        
+        // Generate MPN from ID if not present in specs
+        const mpn = product.specs?.model || product.specs?.mpn || product.id.split("-")[0].toUpperCase();
+
+        return `
+        <item>
+          <g:id>${escapeXml(product.id)}</g:id>
+          <g:title>${escapeXml(product.title)}</g:title>
+          <g:description>${escapeXml(product.description || `Buy ${product.title} at Lapzen.`)}</g:description>
+          <g:link>${escapeXml(product.url || productUrl)}</g:link>
+          <g:image_link>${escapeXml(mainImage)}</g:image_link>
+          ${additionalImages}
+          <g:condition>new</g:condition>
+          <g:availability>${escapeXml(availability)}</g:availability>
+          <g:price>${escapeXml(price)}</g:price>
+          <g:brand>${escapeXml(product.brand || "Lapzen")}</g:brand>
+          <g:mpn>${escapeXml(mpn)}</g:mpn>
+          <g:google_product_category>Electronics &gt; Computers &gt; Laptops</g:google_product_category>
+        </item>`;
+      }).join("");
 
   const xml = `<?xml version="1.0"?>
 <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
