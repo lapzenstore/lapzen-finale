@@ -5,6 +5,7 @@ import { Upload, X, Loader2, Plus, Edit, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { applyWatermark } from "@/lib/image-utils";
 import { CATEGORIES } from "@/lib/constants";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 function LaptopForm({ 
   formData, 
@@ -61,14 +62,13 @@ function LaptopForm({
             </div>
           </div>
 
-          <textarea 
-            required
-            rows={4}
-            placeholder="Product Description"
-            value={formData.description} 
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            className="w-full px-5 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-navy/5 transition-all resize-none"
-          ></textarea>
+          <div className="lg:col-span-1">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Product Description</label>
+            <RichTextEditor 
+              content={formData.description}
+              onChange={(content) => setFormData({...formData, description: content})}
+            />
+          </div>
 
             <div className="grid grid-cols-2 gap-4">
               <select 
